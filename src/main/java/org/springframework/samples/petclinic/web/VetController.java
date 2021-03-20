@@ -66,7 +66,7 @@ public class VetController {
 	}
 
 	
-	@GetMapping(value = {".xml"})
+	@GetMapping(value = {"/xml"})
 	public @ResponseBody Vets showResourcesVetList() {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
@@ -77,13 +77,13 @@ public class VetController {
 	}
 	
 	
-	@GetMapping(value = "new")
+	@GetMapping(value = "/new")
 	public String initCreationForm(Vet vet, ModelMap model) {
 		model.put("vet", new Vet());
 		return FORM;
 	}
 
-	@PostMapping(value = "save")
+	@PostMapping(value = "/save")
 	public String processCreationForm(@Valid Vet vet, BindingResult result, ModelMap model) {		
 		if (result.hasErrors()) {
 			model.put("vet", vet);

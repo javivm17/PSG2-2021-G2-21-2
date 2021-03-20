@@ -36,6 +36,6 @@ import org.springframework.samples.petclinic.model.Vet;
  */
 public interface VetRepository extends CrudRepository<Vet, Integer>{
 
-	@Query("SELECT DISTINCT s FROM Specialties s")
+	@Query("SELECT DISTINCT s FROM Specialty s")
 	List<Specialty> findSpecialties() throws DataAccessException;
 }
