@@ -12,6 +12,7 @@
         <tr>
             <th>Name</th>
             <th>Specialties</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -26,10 +27,16 @@
                     </c:forEach>
                     <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
                 </td>
+                <td>
+                	<button>Editar</button>
+                	<button>Borrar</button>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    
+    <button>Añadir Veterinario</button><br>
 
     <table class="table-buttons">
         <tr>
