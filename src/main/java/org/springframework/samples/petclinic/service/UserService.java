@@ -34,20 +34,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(final UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
+	public void saveUser(final User user) throws DataAccessException {
 		user.setEnabled(true);
-		userRepository.save(user);
+		this.userRepository.save(user);
 	}
 	
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
+	public Optional<User> findUser(final String username) {
+		return this.userRepository.findById(username);
 	}
+	
+	@Transactional
+	public void deleteUser (final User user) throws DataAccessException{
+		user.setEnabled(false);
+		this.userRepository.delete(user);
+	}
+	
 }

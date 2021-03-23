@@ -50,10 +50,13 @@ public class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerService ownerService;
+	
+	private final UserService userService;
 
 	@Autowired
 	public OwnerController(final OwnerService ownerService, final UserService userService, final AuthoritiesService authoritiesService) {
 		this.ownerService = ownerService;
+		this.userService = null;
 	}
 
 	@InitBinder
@@ -149,11 +152,12 @@ public class OwnerController {
 	@RequestMapping(value = "/owners/{ownerId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
 	public String deleteOwner(@PathVariable("ownerId") final int ownerId){
 		try {
-			this.ownerService.deleteOwnerById(ownerId);
+			final Owner owner = this.ownerService.findOwnerById(ownerId);
+			this.ownerService.deleteOwner(owner);
 			return "redirect:/owners";
 		}
 		catch(final DataAccessException d) {
-			return "redirect:/owners/{ownerId}";
+			return "redirect:/oups";
 		}
 	}
 

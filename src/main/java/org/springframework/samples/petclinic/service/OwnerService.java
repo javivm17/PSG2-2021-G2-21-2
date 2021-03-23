@@ -67,8 +67,8 @@ public class OwnerService {
 	}		
 	
 	@Transactional
-	public void deleteOwnerById(final int id) throws DataAccessException{
-		this.ownerRepository.deleteById(id);
+	public void deleteOwner(final Owner owner) throws DataAccessException{
+		this.ownerRepository.delete(owner);
 	}
 
 }
