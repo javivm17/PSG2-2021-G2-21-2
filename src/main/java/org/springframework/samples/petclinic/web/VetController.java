@@ -80,6 +80,7 @@ public class VetController {
 	
 	@GetMapping(value = "/new")
 	public String initCreationForm(Vet vet, ModelMap model) {
+		model.put("haveNotSpec", vetService.findMissingSpecialties(null));
 		model.put("vet", new Vet());
 		return "vets/vetNew";
 	}
@@ -87,6 +88,7 @@ public class VetController {
 	@PostMapping(value = "/save")
 	public String processCreationForm(@Valid Vet vet, BindingResult result, ModelMap model) {		
 		if (result.hasErrors()) {
+			model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
 			model.put("vet", vet);
 			return "vets/vetNew";
 		}
@@ -117,7 +119,8 @@ public class VetController {
 		vet.addSpecialty(sp);
 		model.put("vet", vet);
 		vetService.save(vet);
-		return "vets/vetDetails";
+		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
+		return FORM;
 	}
 	
 	@RequestMapping(value = "/{vetId}/delete/{specId}", method={RequestMethod.DELETE, RequestMethod.GET})
@@ -129,26 +132,15 @@ public class VetController {
 		vet.deleteSpecialty(sp);
 		model.put("vet", vet);
 		vetService.save(vet);
-		return "vets/vetDetails";
+		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
+		return FORM;
 	}
 	
 	@GetMapping(value = "/{vetId}/edit")
 	public String initUpdateForm(@PathVariable("vetId") int vetId, ModelMap model) {
 		Vet vet = this.vetService.findVetById(vetId).get();
+		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
 		model.put("vet", vet);
 		return FORM;
 	}
-
-    @PostMapping(value = "/{vetId}/edit")
-	public String processUpdateForm(@Valid Vet vet, BindingResult result,@PathVariable("vetId") int vetId, ModelMap model) {
-		if (result.hasErrors()) {
-			model.put("vet", vet);
-			return FORM;
-		}
-		else {
-			vetService.save(vet);
-			return "vets";
-		}
-	}
-
 }

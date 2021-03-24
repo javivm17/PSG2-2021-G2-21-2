@@ -25,7 +25,7 @@
 					<c:out value="${vetSpecialty.name}"/>
 					<br/>
     			</c:forEach>
-    			<c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
+    			<c:if test="${vet.nrOfSpecialties == 0}">Ninguna</c:if>
     			</td>
     		</tr>
     	</tbody>

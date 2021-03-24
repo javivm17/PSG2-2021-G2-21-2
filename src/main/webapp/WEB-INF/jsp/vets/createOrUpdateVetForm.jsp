@@ -22,7 +22,7 @@
 		<a href="${fn:escapeXml(deleteUrl)}" class="">&#10060;</a>	
 		<br/>	
 	</c:forEach>
-	<c:if test="${vet.nrOfSpecialties == 0}">Ninguno<br/></c:if>
+	<c:if test="${vet.nrOfSpecialties == 0}">Ninguna<br/></c:if>
 	<br/>
 	
 	<c:out value="Especialidades que no posee:"/><br/>
@@ -30,9 +30,9 @@
 		<c:out value="${Nspecialty.name}"/>
 		<spring:url value="/vets/{vetId}/add/{specId}" var="addUrl">
 			<spring:param name="vetId" value="${vet.id}"/>
-			<spring:param name="specId" value="${vetSpecialty.id}"/>
+			<spring:param name="specId" value="${Nspecialty.id}"/>
 		</spring:url>
-		<a href="${fn:escapeXml(addUrl)}" class="">&#10060;</a>
+		<a href="${fn:escapeXml(addUrl)}" class="">&#9989;</a>
 		<br/>
 	</c:forEach>
 	<!-- <a href="../../vets" class="btn btn-default">Volver</a> -->
