@@ -18,18 +18,18 @@
     <jsp:body>
         <center>
         	<h2>
-            	Add booking
+            	Añadir reserva
         	</h2>
         </center>
         
-        <b>Pet</b>
+        <b>Mascota</b>
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Birth Date</th>
-                <th>Type</th>
-                <th>Owner</th>
+                <th>Nombre</th>
+                <th>Fecha de nacimiento</th>
+                <th>Tipo</th>
+                <th>Dueño</th>
             </tr>
             </thead>
             <tr>
@@ -45,24 +45,24 @@
         <form:form modelAttribute="booking"
                    class="form-horizontal">
             <div class="form-group has-feedback">
-                <petclinic:inputField label="Initial date" name="initialDate"/>
-                <petclinic:inputField label="End date" name="endDate"/>
+                <petclinic:inputField label="Fecha de inicio" name="initialDate"/>
+                <petclinic:inputField label="Fecha de fin" name="endDate"/>
             </div>
             
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="hidden" name="petId" value="${booking.pet.id}"/>
-                    <button class="btn btn-default" type="submit">Add Booking</button>
+                    <button class="btn btn-default" type="submit">Añadir reserva</button>
                 </div>
             </div>
         </form:form>
         
         <br/>
-        <b>Previous bookings</b>
+        <b>Anteriores reservas</b>
         <table class="table table-striped">
             <tr>
-                <th>Initial date</th>
-                <th>End date</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
             </tr>
             <c:forEach var="booking" items="${booking.pet.bookings}">
                 <c:if test="${!booking['new']}">

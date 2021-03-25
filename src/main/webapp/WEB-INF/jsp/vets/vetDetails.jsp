@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <petclinic:layout pageName="vetDet">
-    <h2>Informacion del Veterinario</h2>
+    <h2>Información del Veterinario</h2>
     <table class="table table-striped">
     	<thead>
     	<tr>

@@ -6,16 +6,16 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="owners">
-    <h2>Owners</h2>
+    <h2>Dueños</h2>
 
     <table id="ownersTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 150px;">Name</th>
-            <th style="width: 200px;">Address</th>
-            <th>City</th>
-            <th style="width: 120px">Telephone</th>
-            <th>Pets</th>
+            <th style="width: 150px;">Nombre</th>
+            <th style="width: 200px;">Dirección</th>
+            <th>Ciudad</th>
+            <th style="width: 120px">Teléfono</th>
+            <th>Mascotas</th>
         </tr>
         </thead>
         <tbody>

@@ -6,7 +6,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="vets">
-    <h2>Veterinarians</h2>
+    <h2>Veterinarios</h2>
 
     <table id="vetsTable" class="table table-striped">
         <thead>
@@ -35,7 +35,7 @@
                 	<spring:url value="vets/{vetId}" var="viewUrl">
         				<spring:param name="vetId" value="${vet.id}"/>
     				</spring:url>
-    				<a href="${fn:escapeXml(viewUrl)}" class="btn btn-default">Mas informacion</a>
+    				<a href="${fn:escapeXml(viewUrl)}" class="btn btn-default">Más información</a>
                 	<!-- Editar -->
                 	<spring:url value="vets/{vetId}/edit" var="editUrl">
         				<spring:param name="vetId" value="${vet.id}"/>

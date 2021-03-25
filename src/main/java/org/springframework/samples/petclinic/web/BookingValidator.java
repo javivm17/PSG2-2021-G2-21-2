@@ -16,15 +16,15 @@ public class BookingValidator implements Validator {
 		Booking booking = (Booking) target;
 
 		if (booking.getInitialDate()==null) {
-			errors.rejectValue("initialDate", "required", "required");	
+			errors.rejectValue("initialDate", "Requerido", "Requerido");	
 		}
 		
 		if (booking.getEndDate()==null) {
-			errors.rejectValue("endDate", "required", "required");	
+			errors.rejectValue("endDate", "Requerido", "Requerido");	
 		}
 		
 		if (booking.getEndDate()!=null && booking.getInitialDate()!=null && booking.getInitialDate().isAfter(booking.getEndDate())) {
-			errors.rejectValue("endDate", "The end date must be after than initial date", "The end date must be after than initial date");
+			errors.rejectValue("endDate", "La fecha de fin debe ser posterior a la fecha de fecha de inicio", "La fecha de fin debe ser posterior a la fecha de fecha de inicio");
 		}
 	}
 
