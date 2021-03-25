@@ -15,24 +15,16 @@
  */
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.OwnerRepository;
-import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
-import org.springframework.samples.petclinic.repository.VisitRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -43,17 +35,47 @@ import org.springframework.util.StringUtils;
 @Service
 public class VetService {
 
-	private VetRepository vetRepository;
+	private VetRepository vetRep;
 
 
 	@Autowired
 	public VetService(VetRepository vetRepository) {
-		this.vetRepository = vetRepository;
-	}		
+		this.vetRep = vetRepository;
+	}
+	
+	@Transactional
+	public List<Vet> findVets() {
+		List<Vet> res = new ArrayList<Vet>();
+		vetRep.findAll().forEach(x -> res.add(x));
+		return res;
+	}
+	
+	@Transactional(readOnly=true)
+	public  Optional<Vet> findVetById(int id){ 
+		return vetRep.findById(id);
+	}
 
-	@Transactional(readOnly = true)	
-	public Collection<Vet> findVets() throws DataAccessException {
-		return vetRepository.findAll();
-	}	
+	@Transactional
+	public  void save(Vet vet) {   
+		vetRep.save(vet);
+	}
+
+	@Transactional
+	public  void delete(Vet vet) { 
+		vetRep.delete(vet);
+	}
+	
+	public List<Specialty> findSpecialties() {
+		return vetRep.findSpecialties();
+	}
+	
+	public List<Specialty> findMissingSpecialties(Vet vet) {
+		if (vet == null)
+			return vetRep.findSpecialties();
+		List<Specialty> all = vetRep.findSpecialties();
+		all.removeAll(vet.getSpecialties());
+		return all;
+		
+	}
 
 }
