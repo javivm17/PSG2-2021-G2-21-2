@@ -77,7 +77,7 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+													class="btn btn-primary btn-block btn-sm">Cerrar sesión</a>
 											</p>
 										</div>
 									</div>

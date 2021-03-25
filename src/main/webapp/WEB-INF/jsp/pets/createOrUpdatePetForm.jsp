@@ -29,7 +29,7 @@
                 <petclinic:inputField label="Nombre" name="name"/>
                 <petclinic:inputField label="Fecha de Nacimiento" name="birthDate"/>
                 <div class="control-group">
-                    <petclinic:selectField name="type" label="Type " names="${types}" size="5"/>
+                    <petclinic:selectField name="type" label="Tipo " names="${types}" size="5"/>
                 </div>
             </div>
             <div class="form-group">
