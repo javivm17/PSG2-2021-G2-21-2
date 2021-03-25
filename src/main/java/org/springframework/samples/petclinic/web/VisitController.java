@@ -98,15 +98,11 @@ public class VisitController {
 		return "visitList";
 	}
 	
-	@RequestMapping(value = "/owners/{ownerId}/pets/{petId}/visits/delete", method={RequestMethod.DELETE, RequestMethod.GET})
-    public String deleteVisit(final Owner owner,@Valid final Visit visit,  @PathVariable("petId") final int petId){
-    	try {
-    		this.petService.deleteVisit(visit);
-    		return "redirect:/owners/{ownerId}";
-    	}
-    	catch(final DataAccessException d) {
-    		return "redirect:/oups";
-    	}
+	@GetMapping("/owners/{ownerId}/visit/pet/{petId}/delete/{visitId}")
+    public String deleteVisit(@PathVariable("ownerId") Integer ownerId, @PathVariable("visitId")Integer visitId, @PathVariable("petId")Integer petId){
+        this.petService.deleteVisit(visitId);
+        return "redirect:/owners/{ownerId}";
+
     }
 
 }

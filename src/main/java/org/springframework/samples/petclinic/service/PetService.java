@@ -61,9 +61,9 @@ public class PetService {
 	}
 	
 	@Transactional
-	public void deleteVisit(final Visit visit) throws DataAccessException {
-		this.visitRepository.delete(visit);
-	}
+    public void deleteVisit(final int idVisit) throws DataAccessException {
+        this.visitRepository.deleteById(idVisit);
+    }
 
 	@Transactional(readOnly = true)
 	public Pet findPetById(final int id) throws DataAccessException {

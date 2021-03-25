@@ -152,7 +152,7 @@ public class PetController {
 		}
 	}
         
-        @RequestMapping(value = "/pets/{petId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
+    @RequestMapping(value = "/pets/{petId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
     public String deletePet( final Owner owner, @PathVariable("petId") final int petId){
     	try {
     		final Pet petToRemove = this.petService.findPetById(petId);
