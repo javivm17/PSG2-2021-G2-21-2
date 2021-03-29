@@ -90,9 +90,9 @@ class PetServiceTests {
 		Collection<PetType> petTypes = this.petService.findPetTypes();
 
 		PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);
-		assertThat(petType1.getName()).isEqualTo("cat");
+		assertThat(petType1.getName()).isEqualTo("gato");
 		PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);
-		assertThat(petType4.getName()).isEqualTo("snake");
+		assertThat(petType4.getName()).isEqualTo("serpiente");
 	}
 
 	@Test
@@ -223,5 +223,20 @@ class PetServiceTests {
 		assertThat(visitArr[0].getDate()).isNotNull();
 		assertThat(visitArr[0].getPet().getId()).isEqualTo(7);
 	}
+	
+	@Test
+    @Transactional
+    void shouldDeletePet() {
+		Owner owner = this.ownerService.findOwnerById(1);
+        int found = owner.getPets().size();
+        
+        this.petService.deletePetById(1);
 
+        final Pet petDel = this.petService.findPetById(1);
+        assertThat(petDel).isNull();
+        
+
+    }
+	
+ 
 }
