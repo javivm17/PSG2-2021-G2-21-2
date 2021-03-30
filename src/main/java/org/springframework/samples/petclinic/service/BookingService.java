@@ -21,7 +21,6 @@ public class BookingService {
 	
 	public void deleteBooking(Integer id) {
 		bookingRepository.deleteById(id);
-		System.out.println("ESTOY PASANDO");
 	}
 	
 	
