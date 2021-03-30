@@ -117,13 +117,20 @@
                         <tr>
                             <th>Fecha de inicio de la reserva</th>
                             <th>Fecha de fin de la reserva</th>
+                            <th>Acción</th>
                         </tr>
                         </thead>
                         
                         <c:forEach var="booking" items="${pet.bookings}">
+	                        <spring:url value="/owners/{ownerId}/pets/{petId}/booking/delete/{bookingId}" var="bookUrl">
+                      			<spring:param name="bookingId" value="${booking.id}"/>
+                                <spring:param name="ownerId" value="${owner.id}"/>
+                                <spring:param name="petId" value="${pet.id}"/>
+                            </spring:url>
                             <tr>
                                 <td><petclinic:localDate date="${booking.initialDate}" pattern="yyyy-MM-dd"/></td>
 								<td><petclinic:localDate date="${booking.endDate}" pattern="yyyy-MM-dd"/></td> 
+								<td><a href="${fn:escapeXml(bookUrl)}">Borrar reserva</a></td>
 							</tr>
                         </c:forEach>
                         

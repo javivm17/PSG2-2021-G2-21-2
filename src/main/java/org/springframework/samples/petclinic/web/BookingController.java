@@ -60,6 +60,12 @@ public class BookingController {
 			return "redirect:/owners/{ownerId}"; 
 		}
 	}
+	
+	@GetMapping("/owners/{ownerId}/pets/{petId}/booking/delete/{bookingId}")
+	public String deleteBooking(@PathVariable("bookingId") int bookingId,@PathVariable("ownerId") int ownerId) {
+		bookingService.deleteBooking(bookingId);
+		return "redirect:/owners/{ownerId}";
+	}
 		
 	
 }
