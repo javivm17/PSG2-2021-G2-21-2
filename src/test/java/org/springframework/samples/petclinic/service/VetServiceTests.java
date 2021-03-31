@@ -95,22 +95,34 @@ class VetServiceTests {
 	@Test
 	@Transactional
 	void saveTest() {
-		//TO DO
-		assertThat(true);
+		Vet sharon = this.vetService.findVetById(6).get();
+		List<Specialty> list = this.vetService.findSpecialties();
+		sharon.addSpecialty(list.get(0));
+		sharon.addSpecialty(list.get(1));
+		this.vetService.save(sharon);
+		assertThat(sharon.getNrOfSpecialties()==2);
+		assertThat(sharon.getSpecialties().get(0).getName()=="radiologia");
+		assertThat(sharon.getSpecialties().get(0).getName()=="dentologia");
 	}
 	
 	@Test
 	@Transactional
 	void deleteTest() {
-		//TO DO
-		assertThat(true);
+		Vet linda = this.vetService.findVetById(3).get();
+		this.vetService.delete(linda);
+		assertThat(this.vetService.findVetById(3).isEmpty());
 	}
 	
+	//@SuppressWarnings("unlikely-arg-type")
 	@Test
 	@Transactional
 	void findSpecialtiesTest() {
-		//TO DO
-		assertThat(true);
+		List<Specialty> list = this.vetService.findSpecialties();
+		assertThat(!list.isEmpty());
+		assertThat(list.size()==3);
+		//assertThat(list.contains("cirugia"));
+		//assertThat(list.contains("dentologia"));
+		//assertThat(list.contains("radiologia"));
 	}
 	
 	@Test
