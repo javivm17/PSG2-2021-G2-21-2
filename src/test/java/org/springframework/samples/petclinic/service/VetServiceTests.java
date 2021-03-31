@@ -89,7 +89,7 @@ class VetServiceTests {
 		assertThat(vet.getLastName()).isEqualTo("Douglas");
 		assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
 		assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("cirugia");
-		assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("dentologia");
+		assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("odontologia");
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ class VetServiceTests {
 		this.vetService.save(sharon);
 		assertThat(sharon.getNrOfSpecialties()==2);
 		assertThat(sharon.getSpecialties().get(0).getName()=="radiologia");
-		assertThat(sharon.getSpecialties().get(0).getName()=="dentologia");
+		assertThat(sharon.getSpecialties().get(0).getName()=="odontologia");
 	}
 	
 	@Test
@@ -110,19 +110,17 @@ class VetServiceTests {
 	void deleteTest() {
 		Vet linda = this.vetService.findVetById(3).get();
 		this.vetService.delete(linda);
-		assertThat(this.vetService.findVetById(3).isEmpty());
+		assertThat(!this.vetService.findVetById(3).isPresent());
 	}
 	
-	//@SuppressWarnings("unlikely-arg-type")
 	@Test
 	@Transactional
 	void findSpecialtiesTest() {
 		List<Specialty> list = this.vetService.findSpecialties();
-		assertThat(!list.isEmpty());
 		assertThat(list.size()==3);
-		//assertThat(list.contains("cirugia"));
-		//assertThat(list.contains("dentologia"));
-		//assertThat(list.contains("radiologia"));
+		assertThat(list.get(0).getName().equals("radiologia"));
+		assertThat(list.get(1).getName().equals("cirugia"));
+		assertThat(list.get(2).getName().equals("odontologia"));
 	}
 	
 	@Test
@@ -135,7 +133,7 @@ class VetServiceTests {
 		List<Specialty> specs = this.vetService.findMissingSpecialties(null);
 		assertThat(specs.size() == 2);
 		assertThat(specs.get(0).getName().equals("cirugia"));
-		assertThat(specs.get(1).getName().equals("dentologia"));
+		assertThat(specs.get(1).getName().equals("odontologia"));
 	}
 	
 	@Test
@@ -146,7 +144,7 @@ class VetServiceTests {
 		assertThat(specs.size() == 3);
 		assertThat(specs.get(0).getName().equals("radiologia"));
 		assertThat(specs.get(1).getName().equals("cirugia"));
-		assertThat(specs.get(2).getName().equals("dentologia"));
+		assertThat(specs.get(2).getName().equals("odontologia"));
 	}
 	
 
