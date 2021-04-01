@@ -6,6 +6,7 @@
 
 <petclinic:layout pageName="owners">
 
+	<!-- <a href="javascript:history.back()" class="back-link"> &larr; Volver</a> -->
     <h2>Información del dueño</h2>
 
 
