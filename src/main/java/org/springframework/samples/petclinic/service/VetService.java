@@ -43,7 +43,7 @@ public class VetService {
 		this.vetRep = vetRepository;
 	}
 	
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<Vet> findVets() {
 		List<Vet> res = new ArrayList<Vet>();
 		vetRep.findAll().forEach(x -> res.add(x));
@@ -65,17 +65,18 @@ public class VetService {
 		vetRep.delete(vet);
 	}
 	
+	@Transactional(readOnly=true)
 	public List<Specialty> findSpecialties() {
 		return vetRep.findSpecialties();
 	}
 	
+	@Transactional(readOnly=true)
 	public List<Specialty> findMissingSpecialties(Vet vet) {
 		if (vet == null)
 			return vetRep.findSpecialties();
 		List<Specialty> all = vetRep.findSpecialties();
 		all.removeAll(vet.getSpecialties());
 		return all;
-		
 	}
 
 }

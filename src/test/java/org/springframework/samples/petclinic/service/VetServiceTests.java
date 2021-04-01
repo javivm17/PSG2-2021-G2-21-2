@@ -17,29 +17,16 @@ package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
-import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -79,15 +66,86 @@ class VetServiceTests {
 	protected VetService vetService;	
 
 	@Test
-	void shouldFindVets() {
-		Collection<Vet> vets = this.vetService.findVets();
+	void findVetsTest() {
+		Iterator<Vet> vets = this.vetService.findVets().iterator();
 
-		Vet vet = EntityUtils.getById(vets, Vet.class, 3);
-		assertThat(vet.getLastName()).isEqualTo("Douglas");
-		assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
-		assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("dentistry");
-		assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("surgery");
+		Vet james = vets.next();
+		assertThat(james.getFirstName().equals("James"));
+		assertThat(james.getLastName().equals("Carter"));
+		assertThat(james.getNrOfSpecialties() == 0);
+		
+		assertThat(vets.next().getFirstName().equals("Helen"));
+		assertThat(vets.next().getFirstName().equals("Linda"));
+		assertThat(vets.next().getFirstName().equals("Rafael"));
+		assertThat(vets.next().getFirstName().equals("Henry"));
+		assertThat(vets.next().getFirstName().equals("Sharon"));
+		assertThat(!vets.hasNext());
+		
 	}
 
+	@Test
+	void findVetByIdTest() {
+		Vet vet = this.vetService.findVetById(3).get();
+		assertThat(vet.getLastName()).isEqualTo("Douglas");
+		assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
+		assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("cirugia");
+		assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("odontologia");
+	}
+	
+	@Test
+	@Transactional
+	void saveTest() {
+		Vet sharon = this.vetService.findVetById(6).get();
+		List<Specialty> list = this.vetService.findSpecialties();
+		sharon.addSpecialty(list.get(0));
+		sharon.addSpecialty(list.get(1));
+		this.vetService.save(sharon);
+		assertThat(sharon.getNrOfSpecialties()==2);
+		assertThat(sharon.getSpecialties().get(0).getName()=="radiologia");
+		assertThat(sharon.getSpecialties().get(0).getName()=="odontologia");
+	}
+	
+	@Test
+	@Transactional
+	void deleteTest() {
+		Vet linda = this.vetService.findVetById(3).get();
+		this.vetService.delete(linda);
+		assertThat(!this.vetService.findVetById(3).isPresent());
+	}
+	
+	@Test
+	@Transactional
+	void findSpecialtiesTest() {
+		List<Specialty> list = this.vetService.findSpecialties();
+		assertThat(list.size()==3);
+		assertThat(list.get(0).getName().equals("radiologia"));
+		assertThat(list.get(1).getName().equals("cirugia"));
+		assertThat(list.get(2).getName().equals("odontologia"));
+	}
+	
+	@Test
+	@Transactional
+	void findMissingSpecialtiesTest() {
+		Vet helen = this.vetService.findVetById(2).get();
+		assertThat(helen.getNrOfSpecialties() == 1);
+		assertThat(helen.getSpecialties().get(0).getName().equals("radiologia"));
+		
+		List<Specialty> specs = this.vetService.findMissingSpecialties(null);
+		assertThat(specs.size() == 2);
+		assertThat(specs.get(0).getName().equals("cirugia"));
+		assertThat(specs.get(1).getName().equals("odontologia"));
+	}
+	
+	@Test
+	@Transactional
+	void findMissingSpecialtiesNullVetTest() {
+		List<Specialty> specs = this.vetService.findMissingSpecialties(null);
+		
+		assertThat(specs.size() == 3);
+		assertThat(specs.get(0).getName().equals("radiologia"));
+		assertThat(specs.get(1).getName().equals("cirugia"));
+		assertThat(specs.get(2).getName().equals("odontologia"));
+	}
+	
 
 }
