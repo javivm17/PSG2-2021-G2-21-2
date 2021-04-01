@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.samples.petclinic.repository.BookingRepository;
@@ -23,6 +25,8 @@ public class BookingService {
 		bookingRepository.deleteById(id);
 	}
 	
-	
+	public List<Booking> getBookings(){
+		return bookingRepository.findAll();
+	}
 	
 }
