@@ -51,10 +51,6 @@ public class UserService {
 		return this.userRepository.findById(username);
 	}
 	
-	@Transactional
-	public void deleteUser (final User user) throws DataAccessException{
-		user.setEnabled(false);
-		this.userRepository.delete(user);
-	}
+
 	
 }
