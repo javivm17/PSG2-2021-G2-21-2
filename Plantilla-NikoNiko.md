@@ -34,8 +34,8 @@ In the retrospective meeting, the team has a discussion about those results.
 
 | Day           | Javier        | Jesús          | Ignacio        | José Antonio   | Antonio        | Antonio Manuel |
 | ------------- | ------------- | -------------  | -------------  | -------------  | -------------  | -------------  |
-| Day 1         |      😃         |   😃             | :smiley:               |  😃              |😃                |      😃         |
-| Day 2         |               |                |                |                |                |                |
+| 09-04-2021    |      😃       |   😃           | :smiley:       |  😃            |😃              |      😃        |
+| 15-04-2021    |      -        |       -        |        -        |        -        |        -        |:neutral_face:                |
 | Day 3         |               |                |                |                |                |                |
 | Day 4         |               |                |                |                |                |                |
 | Day 5         |               |                |                |                |                |                |
@@ -43,5 +43,5 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 7         |               |                |                |                |                |                |
 | Day 8         |               |                |                |                |                |                |
 | Day 9         |               |                |                |                |                |                |
-| Day 10         |               |                |                |                |                |                |
+| Day 10        |               |                |                |                |                |                |
 
