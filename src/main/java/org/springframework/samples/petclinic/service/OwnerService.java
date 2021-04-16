@@ -71,6 +71,7 @@ public class OwnerService {
 		this.ownerRepository.delete(owner);
 	}
 
+	@Transactional(readOnly = true)
 	public Owner getOwnerByUserName(String name) {
 		return ownerRepository.getOwnerByUserName(name);
 	}

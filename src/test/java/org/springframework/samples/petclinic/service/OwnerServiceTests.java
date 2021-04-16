@@ -140,5 +140,12 @@ class OwnerServiceTests {
 		assertThat(owners.size()).isEqualTo(found - 1);
 		
 	}
+	
+	@Test
+	void shouldFindOwnerByUserName() {
+		Owner owner = ownerService.getOwnerByUserName("owner1");
+		assertThat(owner).isNotNull();
+
+	}
 
 }
