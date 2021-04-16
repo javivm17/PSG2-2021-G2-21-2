@@ -71,4 +71,8 @@ public class OwnerService {
 		this.ownerRepository.delete(owner);
 	}
 
+	public Owner getOwnerByUserName(String name) {
+		return ownerRepository.getOwnerByUserName(name);
+	}
+
 }

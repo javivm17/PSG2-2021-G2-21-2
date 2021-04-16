@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
 
@@ -159,6 +160,15 @@ public class OwnerController {
 		catch(final DataAccessException d) {
 			return "redirect:/oups";
 		}
+	}
+	
+	
+	@GetMapping(value="/owners/my_profile")
+	public ModelAndView getMyProfile(Principal principal) {
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		return mav;		
 	}
 
 }

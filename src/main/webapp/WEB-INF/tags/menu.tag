@@ -28,23 +28,35 @@
 					<span>Inicio</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="buscar dueños">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Buscar dueños</span>
-				</petclinic:menuItem>
-
+				<sec:authorize access="hasAuthority('admin')">
+					<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+						title="buscar dueños">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Buscar dueños</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
 					title="veterinarios">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarios</span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'adopt'}" url="/adoption/list"
-					title="pagina principal">
-					<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-					<span>Adoptar</span>
-				</petclinic:menuItem>
+				<sec:authorize access="hasAuthority('owner')">	
+					<petclinic:menuItem active="${name eq 'adopt'}" url="/adoption/list"
+						title="mascotas en adopcion">
+						<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+						<span>Adoptar</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAuthority('owner')">
+					<petclinic:menuItem active="${name eq 'owners'}" url="/owners/my_profile"
+						title="mi perfil">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Mi perfil</span>
+					</petclinic:menuItem>
+				</sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
