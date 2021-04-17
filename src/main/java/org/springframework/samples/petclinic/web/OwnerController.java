@@ -17,13 +17,16 @@ package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.AdoptionApplications;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -53,11 +56,14 @@ public class OwnerController {
 	private final OwnerService ownerService;
 	
 	private final UserService userService;
+	
+	private final AdoptionRequestService adoptionRequestService;
 
 	@Autowired
-	public OwnerController(final OwnerService ownerService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public OwnerController(final OwnerService ownerService, final UserService userService, final AuthoritiesService authoritiesService, AdoptionRequestService adoptionRequestService) {
 		this.ownerService = ownerService;
 		this.userService = null;
+		this.adoptionRequestService= adoptionRequestService;
 	}
 
 	@InitBinder
@@ -168,6 +174,8 @@ public class OwnerController {
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
 		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		mav.addObject(owner);
+		Integer pendingRequests = adoptionRequestService.getRequests(owner).size(); 
+		mav.addObject("requests", pendingRequests);
 		return mav;		
 	}
 

@@ -3,6 +3,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+
 
 <petclinic:layout pageName="owners">
 
@@ -39,11 +41,19 @@
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Añadir nueva mascota</a>
     
-     <spring:url value="{ownerId}/delete" var="deleteUrl">
-        <spring:param name="ownerId" value="${owner.id}"/>
-    </spring:url>
-    <a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Borrar dueño</a>
-
+     <sec:authorize access="hasAuthority('admin')">
+	     <spring:url value="{ownerId}/delete" var="deleteUrl">
+	        <spring:param name="ownerId" value="${owner.id}"/>
+	    </spring:url>
+	    <a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Borrar dueño</a>
+	</sec:authorize>
+	
+	<sec:authorize access="hasAuthority('owner')">
+	    <a href="/adoption/requests" class="btn btn-default">Solicitudes de adopcion pendientes (<c:out value="${requests}"/>)</a>
+   </sec:authorize>
+     
+     
+     
     <br/>
     <br/>
     <br/>

@@ -95,3 +95,8 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'castracion');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'esterilizacion');
 
+INSERT INTO  requests(id,description,owner_id,pet_id)  VALUES (1,'Cuidare la mascota',3,2);
+INSERT INTO  requests(id,description,owner_id,pet_id)  VALUES (2,'Tengo 7 mascotas más, me encantan los animales ',3,10);
+INSERT INTO  requests(id,description,owner_id,pet_id)  VALUES (3,'Cuidare la mascota',3,7);
+
+
