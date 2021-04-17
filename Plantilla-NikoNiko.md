@@ -37,7 +37,7 @@ In the retrospective meeting, the team has a discussion about those results.
 | 09-04-2021    |      😃       |       😃       |     :smiley:    |      😃        |       😃       |      😃        |
 | 13-04-2021    |      -        |       -        |        -       |       -       |       😃       |       -        |
 | 15-04-2021    |      -        |       -        |        -       |       -        |       -        |:neutral_face:  |
-| 16-04-2021        |    :neutral_face: |          |                |   😐             |                |                |                |
+| 16-04-2021        |    :neutral_face: |       😃       |                |   😐             |                |                |                |
 | Day 5         |               |                |                |                |                |                |
 | Day 6         |               |                |                |                |                |                |
 | Day 7         |               |                |                |                |                |                |
