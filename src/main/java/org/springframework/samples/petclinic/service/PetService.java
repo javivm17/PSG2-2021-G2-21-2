@@ -103,7 +103,7 @@ public class PetService {
 		for(AdoptionApplications a: ls) {
 			adoptionRequestsRepository.deleteById(a.getId());
 		}
-		this.petRepository.deleteById(id);
+		this.petRepository.deleteById(id); 
 	}
 	
 	@Transactional(readOnly=true)

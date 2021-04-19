@@ -34,6 +34,8 @@ import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.AdoptionRequestsRepository;
+import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
@@ -72,10 +74,16 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class PetServiceTests {        
         @Autowired
-	protected PetService petService;
+        protected PetService petService;
         
         @Autowired
-	protected OwnerService ownerService;	
+        private  PetRepository petRepository;
+        
+        @Autowired
+        protected OwnerService ownerService;	
+        
+        @Autowired
+        protected AdoptionRequestsRepository adoptionRequestsRepository;
 
 	@Test
 	void shouldFindPetWithCorrectId() {
@@ -226,7 +234,7 @@ class PetServiceTests {
 	
 	@Test
     @Transactional
-    void shouldDeletePet() {
+    void shouldDeletePetWithoutAdoptionrequests() {
         
         this.petService.deletePetById(1);
 
@@ -236,8 +244,19 @@ class PetServiceTests {
     }
 	
 	@Test
+    @Transactional
+    void shouldDeletePetWithAdoptionrequests() {
+        
+        this.petService.deletePetById(2);
+
+        Pet petDel = this.petService.findPetById(2);
+        assertThat(petDel).isNull();
+       
+    }
+	
+	@Test
 	@Transactional
-	void shouldDeleteVisitByIdPet() {
+	void shouldDeleteVisitByIdPetWithout() {
 		final Owner owner = this.ownerService.findOwnerById(6);
 		final Pet pet = owner.getPet("Max");
 		final int found = pet.getVisits().size();

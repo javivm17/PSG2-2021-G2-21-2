@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -47,12 +48,14 @@ class OwnerControllerTests {
 	@MockBean
 	private OwnerService clinicService;
         
-        @MockBean
+	@MockBean
 	private UserService userService;
         
-        @MockBean
-        private AuthoritiesService authoritiesService; 
+    @MockBean
+    private AuthoritiesService authoritiesService; 
 
+    @MockBean
+    private AdoptionRequestService AdoptionRequestService;
 	@Autowired
 	private MockMvc mockMvc;
 

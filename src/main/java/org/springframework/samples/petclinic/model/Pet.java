@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -60,7 +61,7 @@ public class Pet extends NamedEntity {
 	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit> visits;
 	
-	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Booking> bookings;
 	
 	@Column(name = "adoption")

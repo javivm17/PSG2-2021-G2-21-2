@@ -30,6 +30,7 @@ import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -157,10 +158,13 @@ public class OwnerController {
 	}
 	
 	@RequestMapping(value = "/owners/{ownerId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
-	public String deleteOwner(@PathVariable("ownerId") final int ownerId){
+	public String deleteOwner(@PathVariable("ownerId") final int ownerId, Principal principal){
 		try {
 			final Owner owner = this.ownerService.findOwnerById(ownerId);
+			Owner ownerLogeado = ownerService.getOwnerByUserName(principal.getName());
 			this.ownerService.deleteOwner(owner);
+			//If the owner logged is the same than the owner is going to be deleted the session will finish.
+			if(owner.getId().equals(ownerLogeado.getId())) SecurityContextHolder.clearContext();
 			return "redirect:/";
 		}
 		catch(final DataAccessException d) {

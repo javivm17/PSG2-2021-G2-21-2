@@ -29,13 +29,17 @@ public class AdoptionRequestService {
 	public List<AdoptionApplications> getRequests(Owner owner) {
 		return adoptionRequestsRepository.getRequestsByUser(owner.getId());
 	}
+	
+	public List<AdoptionApplications> getRequestsSended (Integer id){
+		return adoptionRequestsRepository.getRequestsByUserApplicant(id);
+	}
 
 	
 	public Optional<AdoptionApplications>getRequestById(int id){
 		return adoptionRequestsRepository.findById(id);
 
 	}
-	
+	 
 	@Transactional
 	public void acceptRequest(AdoptionApplications request) throws DataAccessException, DuplicatedPetNameException {
 		Pet p = request.getPet();

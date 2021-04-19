@@ -73,7 +73,8 @@ public class OwnerService {
 	@Transactional
 	public void deleteOwner(final Owner owner) throws DataAccessException{
 		//Se deben borrar las requests asociadas 
-		List<AdoptionApplications>ls =adoptionRequestService.getRequests(owner);
+		List<AdoptionApplications>ls =adoptionRequestService.getRequestsSended(owner.getId());
+		ls.addAll(adoptionRequestService.getRequests(owner));
 		for(AdoptionApplications a: ls) {
 			adoptionRequestService.removeRequest(a.getId());
 		}
