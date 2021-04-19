@@ -5,19 +5,21 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<petclinic:layout pageName="vetNew">
+<petclinic:layout pageName="causes">
 	<h2>
-    	Nuevo Veterinario
+    	Nueva causa
     </h2>
-    <form:form modelAttribute="vet" class="form-horizontal" action="/vets/save">
-		<input type="hidden" name="id" value="${vet.id}"/>
+    <form:form modelAttribute="cause" class="form-horizontal" action="/causes/save">
+		<input type="hidden" name="id" value="${cause.id}"/>
 		<div class="form-group has-feedback">
-				<petclinic:inputField label="Nombre" name="firstName"/>
-				<petclinic:inputField label="Apellido" name="lastName"/>
+				<petclinic:inputField label="Nombre" name="name"/>
+				<petclinic:inputField label="Descripción" name="description"/>
+				<petclinic:inputField label="Organización benéfica" name="organization"/>
+				<petclinic:inputField label="Cantidad objetivo" name="target"/>
 		</div>
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<button class="btn btn-default" type="submit">Añadir veterinario</button>
+				<button class="btn btn-default" type="submit">Añadir causa</button>
 			</div>
 		</div>
 	</form:form>

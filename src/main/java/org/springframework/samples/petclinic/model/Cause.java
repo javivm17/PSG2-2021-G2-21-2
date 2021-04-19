@@ -4,42 +4,60 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "causes")
-public class Cause {
+public class Cause extends NamedEntity{
 	
 	private String description;
 	
 	@NotBlank
 	private String organization;
 	
+	@NotNull
+	private boolean isClosed;
+	
 	@NotBlank
 	@Min(value=0)
 	private Integer target;
+	
+	@NotBlank
+	@Min(value=0)
+	private Integer donated;
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getorganization() {
-		return this.organization;
+	public String getOrganization() {
+		return organization;
 	}
 
-	public void setorganization(final String organization) {
+	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
 
-	public Integer getTarget() {
-		return this.target;
+	public boolean isClosed() {
+		return isClosed;
 	}
 
-	public void setTarget(final Integer target) {
+	public void setClosed(boolean isClosed) {
+		this.isClosed = isClosed;
+	}
+
+	public Integer getTarget() {
+		return target;
+	}
+
+	public void setTarget(Integer target) {
 		this.target = target;
 	}
+
+	
 
 }

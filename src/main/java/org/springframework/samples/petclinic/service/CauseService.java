@@ -1,13 +1,12 @@
 package org.springframework.samples.petclinic.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.repository.CauseRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CauseService {
@@ -20,12 +19,12 @@ public class CauseService {
 	}
 	
 	@Transactional
-	public Iterable<Cause> findAll() {
+	public List<Cause> findAll() {
 		return causeRepo.findAll();
 	}
 	
 	@Transactional(readOnly=true)
-	public  Optional<Cause> findCauseById(int id){ 
+	public Cause findCauseById(int id){ 
 		return causeRepo.findById(id);
 	}
 	
@@ -34,11 +33,8 @@ public class CauseService {
 		causeRepo.save(cause);
 	}
 
-	public  void delete(Cause cause) { 
-		causeRepo.delete(cause);
+	public void delete(int id) { 
+		causeRepo.deleteById(id);
 	}
 	
-	public Integer getCurrentBudget(int causeId) {
-		return causeRepo.getCurrentBudget(causeId);
-	}
 }
