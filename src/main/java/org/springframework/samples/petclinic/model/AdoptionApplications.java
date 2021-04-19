@@ -52,6 +52,6 @@ public class AdoptionApplications extends BaseEntity{
 	public void setPet(Pet pet) {
 		this.pet = pet;
 	}
-    
-    
+	
+	
 }

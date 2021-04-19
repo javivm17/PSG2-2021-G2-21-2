@@ -9,12 +9,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.AdoptionApplications;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.service.AdoptionRequestService;
+import org.springframework.samples.petclinic.service.AdoptionService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,19 +24,24 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/adoption")
 
 public class AdoptionController {
+	private static final String VIEWS_REQUEST_CREATE_OR_UPDATE_FORM = "adoption/formAdoption";
 	
 	private PetService petService;
 	
 	private OwnerService ownerService;
 	
 	private AdoptionRequestService adoptionRequestService;
+	
+	private AdoptionService adoptionService;
+
 
 	
 	@Autowired
-	public AdoptionController(PetService petService,OwnerService ownerService, AdoptionRequestService adoptionRequestService) {
+	public AdoptionController(PetService petService,OwnerService ownerService, AdoptionRequestService adoptionRequestService, AdoptionService adoptionService) {
 		this.petService = petService;
 		this.ownerService= ownerService;
 		this.adoptionRequestService= adoptionRequestService;
+		this.adoptionService = adoptionService;
 	}
 
 	@GetMapping(value = "/list")
@@ -42,6 +49,25 @@ public class AdoptionController {
 		model.put("pets", petService.findAdoptablePets());
 		model.put("owners", petService.findOwners());
 		return "adoption/listAdoptablePets";
+	}
+	
+	@GetMapping(value = "/new/{id}")
+	public String initCreationForm(@PathVariable("id") Integer id, final Map<String, Object> model, Principal principal) {
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		final AdoptionApplications request = new AdoptionApplications();
+		System.out.println(id);
+		model.put("pet", petService.findPetById(id));
+		model.put("owner", owner);
+		model.put("request", request);
+		return AdoptionController.VIEWS_REQUEST_CREATE_OR_UPDATE_FORM;
+	}
+	
+	@PostMapping(value = "/new")
+	public String processCreationForm(AdoptionApplications request) {
+			System.out.println("prueba");
+			this.adoptionService.saveRequest(request);			
+			return "redirect:/";
+		
 	}
 	
 	@GetMapping(value="/requests")
