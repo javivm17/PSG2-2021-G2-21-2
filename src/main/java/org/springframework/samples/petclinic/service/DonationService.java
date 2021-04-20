@@ -33,6 +33,9 @@ public class DonationService {
 		this.donationRepository.delete(donation);
 	}
 	
+	public Donation findDonationById(final int id) throws DataAccessException {
+		return this.donationRepository.findById(id);
+	}
 
 	public Collection<Donation> findDonationsByCauseId(final int causeId) throws DataAccessException{
 		return this.donationRepository.findByCauseId(causeId);
