@@ -69,6 +69,25 @@
                         <dd><petclinic:localDate date="${pet.birthDate}" pattern="yyyy-MM-dd"/></dd>
                         <dt>Tipo</dt>
                         <dd><c:out value="${pet.type.name}"/></dd>
+                        <dt>Dar en adopcion</dt>
+                        <dd>
+                       		<c:if test="${pet.getInAdoption() == false}">
+                       			<spring:url value="/adoption/{ownerId}/{petId}/{option}" var="visitUrl">
+                                	<spring:param name="ownerId" value="${owner.id}"/>
+                                	<spring:param name="petId" value="${pet.id}"/>
+                                	<spring:param name="option" value="1"/>
+                                </spring:url>
+                               	<a href="${fn:escapeXml(visitUrl)}">Dar en adopcion</a>
+                            </c:if>
+                       		<c:if test="${pet.getInAdoption()== true}">
+                       			<spring:url value="/adoption/{ownerId}/{petId}/{option}" var="visitUrl">
+                                	<spring:param name="ownerId" value="${owner.id}"/>
+                                	<spring:param name="petId" value="${pet.id}"/>
+                                	<spring:param name="option" value="0"/>
+                                </spring:url>
+                               	<a href="${fn:escapeXml(visitUrl)}">Quitar de adopcion</a>
+                            </c:if>
+                        </dd>
                     </dl>
                 </td>
                 <td valign="top">

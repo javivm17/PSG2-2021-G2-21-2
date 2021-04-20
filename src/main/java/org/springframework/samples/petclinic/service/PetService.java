@@ -107,9 +107,14 @@ public class PetService {
 	}
 	
 	@Transactional(readOnly=true)
-	public List<Pet> findAdoptablePets(){
-		List<Pet> res = petRepository.findAdoptablePets();
+	public List<Pet> findAdoptablePets(Integer id){
+		List<Pet> res = petRepository.findAdoptablePets(id);
 		return res;
+	}
+	
+	@Transactional(rollbackFor = DuplicatedPetNameException.class)
+	public void changeAdoption(Pet pet) {
+		this.petRepository.save(pet);
 	}
 	
 	@Transactional(readOnly=true)

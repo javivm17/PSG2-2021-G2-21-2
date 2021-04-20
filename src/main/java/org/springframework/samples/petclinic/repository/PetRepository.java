@@ -61,8 +61,8 @@ public interface PetRepository extends Repository<Pet, Integer> {
 	 * Retrieve all <code>Pet</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>Pet</code>s
 	 */
-	@Query("SELECT pets FROM Pet pets WHERE pets.inAdoption = 1")
-	List<Pet> findAdoptablePets() throws DataAccessException;
+	@Query("SELECT pets FROM Pet pets, Owner owners WHERE pets.inAdoption = 1 AND pets.owner.id = owners.id AND pets.owner.id != ?1")
+	List<Pet> findAdoptablePets(Integer id) throws DataAccessException;
 	
 	@Query("SELECT own FROM Owner own")
 	List<Owner> allOwners() throws DataAccessException;

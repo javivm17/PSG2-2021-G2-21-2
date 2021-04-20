@@ -1,23 +1,31 @@
 package org.springframework.samples.petclinic.web;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.AdoptionApplications;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AdoptionService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -45,10 +53,27 @@ public class AdoptionController {
 	}
 
 	@GetMapping(value = "/list")
-    public String showAdoptablePetsList(Map<String, Object> model) {
-		model.put("pets", petService.findAdoptablePets());
-		model.put("owners", petService.findOwners());
-		return "adoption/listAdoptablePets";
+    public ModelAndView showAdoptablePetsList(Principal principal) {
+		List<Pet> pets = petService.findAdoptablePets(ownerService.getOwnerByUserName(principal.getName()).getId());
+		List<Owner> owners = petService.findOwners();
+		final ModelAndView mav = new ModelAndView("adoption/listAdoptablePets");
+		mav.addObject("pets", pets);
+		mav.addObject("owners", owners);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/{ownerId}/{petId}/{option}", method={RequestMethod.PUT, RequestMethod.GET})
+	public String processUpdateAdoption(@PathVariable("petId") int petId,@PathVariable("ownerId") int ownerId,@PathVariable("option") int option, final ModelMap model) {
+		Pet pet = this.petService.findPetById(petId);
+		Boolean opcion = null;
+		if (option == 1) opcion = true;
+		if (option ==0) opcion = false;
+		pet.setInAdoption(opcion);                                                                         
+                try {                    
+                	this.petService.savePet(pet);                    
+                } catch (final DuplicatedPetNameException ex) {
+                }
+		return "redirect:/owners/{ownerId}";
 	}
 	
 	@GetMapping(value = "/new/{id}")
