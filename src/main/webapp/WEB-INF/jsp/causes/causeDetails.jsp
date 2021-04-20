@@ -22,10 +22,12 @@
     <br>
     <progress id="donationbar" max="${cause.target}" value="${cause.donated}"></progress>
     <br>
-    <spring:url value="{causeId}/donations/new" var="donateUrl">
-        				<spring:param name="causeId" value="${cause.id}"/>
-    				</spring:url>
-    				<a href="${fn:escapeXml(donateUrl)}" class="btn btn-default">Donar</a>
+    <c:if test="${!cs.closed}"> 
+	    <spring:url value="{causeId}/donations/new" var="donateUrl">
+	 		<spring:param name="causeId" value="${cause.id}"/>
+		</spring:url>
+		<a href="${fn:escapeXml(donateUrl)}" class="btn btn-default">Donar</a>
+    </c:if>
     <br>
     <br>
     <h1>Información de las donaciones</h1>

@@ -38,20 +38,20 @@ public class CauseController {
 	}
 	
 	@GetMapping(path="/new")
-	public String initCreateCause(final ModelMap modelMap) {
+	public String initCreateCause(ModelMap modelMap) {
 		modelMap.addAttribute("cause", new Cause());
 		return "causes/causeNew";
 	}
 	
-	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid final Cause cause, final BindingResult result,
-		final ModelMap model) {	
+	@PostMapping(value = "/save")
+	public String processCreationForm(@Valid Cause cause, BindingResult result, ModelMap model) {	
 		if (result.hasErrors()) {
+			model.addAttribute("cause", cause);
 			return "causes/causeNew";
 		}
 		else {
 			this.causeService.save(cause);
-			return "redirect:/causes";
+			return showCauseList(model);
 		}
 	}
 	
