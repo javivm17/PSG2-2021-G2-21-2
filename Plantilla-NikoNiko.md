@@ -40,7 +40,7 @@ In the retrospective meeting, the team has a discussion about those results.
 | 16-04-2021    |    :neutral_face: |       😐        |      :smiley:           |   😐             |       😃         |                |                |
 | 17-04-2021    | :neutral_face:              |                |      :neutral_face:          | 😐               |                |                |
 | 18-04-2021        |        😃        |                |                |  😐              |                |                |
-| 19-04-2021         |    😃           |                |                |                |                |                |
+| 19-04-2021         |    😃           |       :worried:         |                |                |                |                |
 | Day 8         |               |                |                |                |                |                |
 | Day 9         |               |                |                |                |                |                |
 | Day 10        |               |                |                |                |                |                |
