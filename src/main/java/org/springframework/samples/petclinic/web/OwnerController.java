@@ -151,9 +151,12 @@ public class OwnerController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
-	public ModelAndView showOwner(@PathVariable("ownerId") final int ownerId) {
+	public ModelAndView showOwner(@PathVariable("ownerId") final int ownerId, Principal principal) {
+		Owner owner = this.ownerService.findOwnerById(ownerId);
 		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
+		mav.addObject(owner);
+		Integer pendingRequests = adoptionRequestService.getRequests(owner).size(); 
+		mav.addObject("requests", pendingRequests);
 		return mav;
 	}
 	
