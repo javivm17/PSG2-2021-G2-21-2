@@ -62,6 +62,12 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'castracion');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'esterilizacion');
 
-INSERT INTO causes(id,name,description, organization, closed, target, donated) VALUES(1,'rescate de kowalsky','Atrapado', 'Los pingus de madagascar', FALSE, 300, 50);
+INSERT INTO causes(id,name,description, organization, closed, target, donated) VALUES(1,'Limpieza de vertido de petroleo','5000 litros de crudo fueron vertidos en mitad del Mediterraneo', 'GreenPeace', FALSE, 300, 50);
+INSERT INTO causes(id,name,description, organization, closed, target, donated) VALUES(2,'Rescate de ballena varada','Atrapada', 'GreenPeace', TRUE, 100, 100);
+INSERT INTO causes(id,name,description, organization, closed, target, donated) VALUES(3,'Habitat para el lince iberico','Relocalizacion de 300 linces en reserva natural', 'Junta de Andalucia', FALSE, 800, 300);
 
-INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(1,'2020-09-07', 50, 1,1)
+INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(1,'2020-09-07', 50, 1,1);
+INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(2,'2020-09-03', 100, 2,1);
+INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(3,'2020-09-07', 50, 3,1);
+INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(4,'2020-09-08', 100, 3,1);
+INSERT INTO donations(id,donation_date,amount, cause_id, owner_id) VALUES(5,'2020-09-09', 150, 3,1);
