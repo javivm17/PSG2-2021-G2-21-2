@@ -18,6 +18,8 @@
     <h4>Estado</h4>
 	<c:out value="${cause.closed ? 'Finalizada' : 'Abierta'}"></c:out> 
     <h4>Estado de las donaciones</h4>
+    <b>0</b> <b class="numfinaldonacion">${cause.target}</b>
+    <br>
     <progress id="donationbar" max="${cause.target}" value="${cause.donated}"></progress>
     <br>
     <spring:url value="{causeId}/donations/new" var="donateUrl">
