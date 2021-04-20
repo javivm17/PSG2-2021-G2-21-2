@@ -18,12 +18,17 @@ package org.springframework.samples.petclinic.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -268,5 +273,38 @@ class PetServiceTests {
 		assertThat(visitDel).isEqualTo(found - 1);
 	}
 	
+	@Test
+	@Transactional
+	void shouldFindAdoptablePets() {
+		final Owner owner = this.ownerService.findOwnerById(2);
+		final List<Pet> petsToAdoption = owner.getPets().stream().filter(x->x.getInAdoption()==true).collect(Collectors.toList());
+		final List<Pet> allPets = this.petService.findAdoptablePets(99999);
+		final List<Pet> adoptablePets = this.petService.findAdoptablePets(2);
+		
+		assertEquals(allPets.size()-adoptablePets.size(), petsToAdoption.size());
+		assertEquals(petsToAdoption.size(), 1);
+		assertTrue(allPets.containsAll(petsToAdoption));
+		assertTrue(allPets.containsAll(adoptablePets));
+	}
+	
+	@Test
+	@Transactional
+	void shouldChangeAdoption() {
+		final Owner owner = this.ownerService.findOwnerById(2);
+		final List<Pet> petsToAdoption = owner.getPets().stream().filter(x->x.getInAdoption()==true).collect(Collectors.toList());
+		final Pet petToUpdate = petsToAdoption.get(0);
+		petsToAdoption.get(0).setInAdoption(false);
+		final List<Pet> allPets = this.petService.findAdoptablePets(99999);
+		
+		assertEquals(petToUpdate.getInAdoption(), false);
+		assertEquals(allPets.contains(petToUpdate), false);
+	}
+	
+	@Test
+	@Transactional
+	void shouldFindOwners() {
+		final List<Owner> allOwners= this.petService.findOwners();
+		assertTrue(allOwners.size() == 10);
+	}
  
 }
