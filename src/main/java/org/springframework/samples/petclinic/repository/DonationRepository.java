@@ -17,4 +17,6 @@ public interface DonationRepository extends Repository<Donation, Integer>{
 	void deleteById(int id) throws DataAccessException;
 	
 	Donation findById(int id) throws DataAccessException;
+	
+	//Owner findOwnerByDonation(Donation donation);
 }

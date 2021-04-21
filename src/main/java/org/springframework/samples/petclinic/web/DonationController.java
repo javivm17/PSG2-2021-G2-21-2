@@ -75,6 +75,8 @@ public class DonationController {
 	public String showDetails(@PathVariable final int causeId, final Map<String, Object> model) {
 		model.put("donations", this.donationService.findDonationsByCauseId(causeId));
 		model.put("cause", this.causeService.findCauseById(causeId));
+		
+		//model.put("donator", this.donationService.findDonationById(donationId).getOwner());
 		return "causes/causeDetails";
 	}
 	

@@ -41,4 +41,8 @@ public class DonationService {
 		return this.donationRepository.findByCauseId(causeId);
 	}
 	
+//	public 	Owner findOwnerByDonation(final Donation donation) throws DataAccessException{
+//		return this.donationRepository.findOwnerByDonation(donation);
+//	}
+	
 }

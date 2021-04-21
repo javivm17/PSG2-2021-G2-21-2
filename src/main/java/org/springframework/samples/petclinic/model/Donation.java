@@ -32,7 +32,7 @@ public class Donation extends BaseEntity{
 	
 	@JoinColumn(name = "owner_id")
 	@ManyToOne
-	private Owner owner; //owner o user???
+	private Owner owner;
 
 	
 	public LocalDate getDate() {
