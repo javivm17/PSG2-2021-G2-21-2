@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -99,8 +99,8 @@ public class PetService {
 	@Transactional
 	public void deletePetById(final int id) throws DataAccessException{
 		//Se deben borrar las requests asociadas 
-		List<AdoptionApplications>ls =adoptionRequestsRepository.findRequestsByPet(id);
-		for(AdoptionApplications a: ls) {
+		List<Adoption>ls =adoptionRequestsRepository.findRequestsByPet(id);
+		for(Adoption a: ls) {
 			adoptionRequestsRepository.deleteById(a.getId());
 		}
 		this.petRepository.deleteById(id); 

@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
@@ -73,9 +73,9 @@ public class OwnerService {
 	@Transactional
 	public void deleteOwner(final Owner owner) throws DataAccessException{
 		//Se deben borrar las requests asociadas 
-		List<AdoptionApplications>ls =adoptionRequestService.getRequestsSended(owner.getId());
+		List<Adoption>ls =adoptionRequestService.getRequestsSended(owner.getId());
 		ls.addAll(adoptionRequestService.getRequests(owner));
-		for(AdoptionApplications a: ls) {
+		for(Adoption a: ls) {
 			adoptionRequestService.removeRequest(a.getId());
 		}
 		this.ownerRepository.delete(owner);

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ class AdoptionApplicationsServiceTests {
 	void shouldSaveBooking() {
 		Owner o = ownerService.findOwnerById(2);
 		Pet p = petService.findPetById(2);
-		AdoptionApplications request = new AdoptionApplications();
+		Adoption request = new Adoption();
 		request.setPet(p);
 		request.setDescription("Esto es una prueba");
 		

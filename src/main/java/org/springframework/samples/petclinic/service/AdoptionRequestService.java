@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.repository.AdoptionRequestsRepository;
@@ -26,22 +26,22 @@ public class AdoptionRequestService {
 	}
 
 
-	public List<AdoptionApplications> getRequests(Owner owner) {
+	public List<Adoption> getRequests(Owner owner) {
 		return adoptionRequestsRepository.getRequestsByUser(owner.getId());
 	}
 	
-	public List<AdoptionApplications> getRequestsSended (Integer id){
+	public List<Adoption> getRequestsSended (Integer id){
 		return adoptionRequestsRepository.getRequestsByUserApplicant(id);
 	}
 
 	
-	public Optional<AdoptionApplications>getRequestById(int id){
+	public Optional<Adoption>getRequestById(int id){
 		return adoptionRequestsRepository.findById(id);
 
 	}
 	 
 	@Transactional
-	public void acceptRequest(AdoptionApplications request) throws DataAccessException, DuplicatedPetNameException {
+	public void acceptRequest(Adoption request) throws DataAccessException, DuplicatedPetNameException {
 		Pet p = request.getPet();
 		p.setInAdoption(false);
 		Owner o = request.getOwner();
@@ -50,8 +50,8 @@ public class AdoptionRequestService {
 		petService.savePet(p);
 		
 		//Además debemos eliminar las requests asociadas a esa mascota
-		List<AdoptionApplications>requestsRestantes = adoptionRequestsRepository.findRequestsByPet(p.getId());
-		for(AdoptionApplications a : requestsRestantes) {
+		List<Adoption>requestsRestantes = adoptionRequestsRepository.findRequestsByPet(p.getId());
+		for(Adoption a : requestsRestantes) {
 			adoptionRequestsRepository.delete(a);	
 		}
 	}
@@ -62,7 +62,7 @@ public class AdoptionRequestService {
 	}
 
 
-	public List<AdoptionApplications> getRequestsByPet(int id) {
+	public List<Adoption> getRequestsByPet(int id) {
 		return adoptionRequestsRepository.findRequestsByPet(id);
 	}
 

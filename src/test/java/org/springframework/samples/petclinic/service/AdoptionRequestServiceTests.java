@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +26,13 @@ class AdoptionRequestServiceTests {
 	
 	@Test
 	void shouldGetRequestById() {
-		AdoptionApplications a = adoptionRequestService.getRequestById(1).get();
+		Adoption a = adoptionRequestService.getRequestById(1).get();
 		assertNotNull(a);
 	}
 	
 	@Test
 	void shouldAcceptRequest() throws DataAccessException, DuplicatedPetNameException {
-		AdoptionApplications a = adoptionRequestService.getRequestById(1).get();
+		Adoption a = adoptionRequestService.getRequestById(1).get();
 		Integer idOwnerBeforeAdopt = a.getPet().getOwner().getId();		
 		
 		adoptionRequestService.acceptRequest(a);
@@ -44,7 +44,7 @@ class AdoptionRequestServiceTests {
 	
 	@Test 
 	void shouldDeleteRequest(){
-		AdoptionApplications a = adoptionRequestService.getRequestById(1).get();
+		Adoption a = adoptionRequestService.getRequestById(1).get();
 		
 		adoptionRequestService.removeRequest(1);
 		
@@ -54,7 +54,7 @@ class AdoptionRequestServiceTests {
 	
 	@Test
 	void shouldGetRequestsByPet() {
-		List<AdoptionApplications> ls = adoptionRequestService.getRequestsByPet(1);
+		List<Adoption> ls = adoptionRequestService.getRequestsByPet(1);
 		assertNotNull(ls);	
 	}
 	

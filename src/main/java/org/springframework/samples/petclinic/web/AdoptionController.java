@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.AdoptionApplications;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.service.AdoptionRequestService;
@@ -44,11 +44,6 @@ public class AdoptionController {
 	
 	private AdoptionService adoptionService;
 
-	@InitBinder("adoption")
-	public void initAdoptionBinder(final WebDataBinder dataBinder) {
-		dataBinder.setValidator(new AdoptionValidator());
-	}
-	
 	@Autowired
 	public AdoptionController(PetService petService,OwnerService ownerService, AdoptionRequestService adoptionRequestService, AdoptionService adoptionService) {
 		this.petService = petService;
@@ -84,38 +79,38 @@ public class AdoptionController {
 	@GetMapping(value = "/new/{id}")
 	public String initCreationForm(@PathVariable("id") Integer id, final Map<String, Object> model, Principal principal) {
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		final AdoptionApplications request = new AdoptionApplications();
+		final Adoption request = new Adoption();
 		model.put("pet", petService.findPetById(id));
 		model.put("owner", owner);
-		model.put("request", request);
+		model.put("adoption", request);
 		return AdoptionController.VIEWS_REQUEST_CREATE_FORM;
 	}
 	
 	@PostMapping(value = "/new/{id}")
-	public String processCreationForm(@PathVariable("id") Integer id, @Valid AdoptionApplications adoption, BindingResult result, final ModelMap model, Principal principal) {
+	public String processCreationForm(@PathVariable("id") Integer id, @Valid Adoption AdoptionApplications, BindingResult result, final ModelMap model, Principal principal) {
 		if (result.hasErrors()) {
 			Owner owner = ownerService.getOwnerByUserName(principal.getName());
 			model.put("pet", petService.findPetById(id));
 			model.put("owner", owner);
-			model.put("request", adoption);
+			model.put("adoption", AdoptionApplications);
 			return AdoptionController.VIEWS_REQUEST_CREATE_FORM;
 		}
 		else {
-             this.adoptionService.saveRequest(adoption);                    
+             this.adoptionService.saveRequest(AdoptionApplications);                    
              return "redirect:/adoption/requestsent";              
 			
 		}
 	}
 	
 	@GetMapping(value="/requestsent")
-	public void successSentForm(AdoptionApplications request) {		
+	public void successSentForm(Adoption request) {		
 	}
 		
 	
 	@GetMapping(value="/requests")
 	public ModelAndView getPendingRequests(Principal principal) {
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		List<AdoptionApplications>pendingRequets = adoptionRequestService.getRequests(owner); 
+		List<Adoption>pendingRequets = adoptionRequestService.getRequests(owner); 
 		ModelAndView mov = new ModelAndView("adoption/pendingRequests");
 		mov.addObject("requests", pendingRequets);
 		mov.addObject("numRequests",pendingRequets.size());
@@ -125,7 +120,7 @@ public class AdoptionController {
 	@GetMapping(value="/accept/{reqId}")
 	public String acceptRequest(@PathVariable("reqId") Integer reqId, Principal principal) throws DataAccessException, DuplicatedPetNameException {
 		Owner ownerLogeado = ownerService.getOwnerByUserName(principal.getName());
-		AdoptionApplications request = adoptionRequestService.getRequestById(reqId).orElse(null);
+		Adoption request = adoptionRequestService.getRequestById(reqId).orElse(null);
 		
 		if(request.getPet().getOwner().getId().equals(ownerLogeado.getId()))
 			this.adoptionRequestService.acceptRequest(request);
@@ -135,7 +130,7 @@ public class AdoptionController {
 	@GetMapping(value="/deny/{reqId}")
 	public String denyString(@PathVariable("reqId") Integer reqId, Principal principal) {
 		Owner ownerLogeado = ownerService.getOwnerByUserName(principal.getName());
-		AdoptionApplications request = adoptionRequestService.getRequestById(reqId).orElse(null);
+		Adoption request = adoptionRequestService.getRequestById(reqId).orElse(null);
 		
 		if(request.getPet().getOwner().getId().equals(ownerLogeado.getId()))
 			adoptionRequestService.removeRequest(request.getId());

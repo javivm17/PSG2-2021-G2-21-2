@@ -22,17 +22,11 @@
                 </td>
 </tr>
 </table>
-        <form:form modelAttribute="AdoptionApplications" class="form-horizontal" action="/adoption/new/${pet.id}" method="POST">
+        <form:form modelAttribute="adoption" class="form-horizontal" action="/adoption/new/${pet.id}" method="POST">
             <input type="hidden" name="pet" value="${pet.id}"/>
             <input type="hidden" name="owner" value="${owner.id}"/>
             <label>¿Como cuidaras la mascota?</label>
-            <div class="form-group has-feedback">
-            <div class="form-group">
-                <div class="col-sm-2 col-sm-10">
-                   <textarea label="Descripcion" name="description" rows="10" cols="60" required></textarea>
-                </div>
-            </div>
-            </div>
+				<petclinic:inputField label="Descripcion" name="description"/>                
             <div class="form-group">
                 <div class="col-sm-2 col-sm-10">
                    <button href="/adoption/requestsent" class="btn btn-default" type="submit">Enviar solicitud</button>
