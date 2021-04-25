@@ -56,6 +56,11 @@ public class BookingController {
 			return "pets/createBookingForm";
 		}
 		else {
+			boolean isOverlapped = this.bookingService.isOverlapped(booking);
+			if(isOverlapped) {
+    			result.rejectValue("endDate", "Existe una reserva para esta mascota en estas mismas fechas", "Existe una reserva para esta mascota en estas mismas fechas");
+    			return "pets/createBookingForm";				
+			}
 			this.bookingService.saveBooking(booking);
 			return "redirect:/owners/{ownerId}"; 
 		}
@@ -66,10 +71,5 @@ public class BookingController {
 		bookingService.deleteBooking(bookingId);
 		return "redirect:/owners/{ownerId}";
 	}
-	//Esta función que lista los bookings de una pet según el id es dónde creo que está el problema porque realmente no manda la info a ningún sitio ¿?	
-	@GetMapping(value = "/owners/*/pets/{petId}/bookings") //La "dirección" esta no creo que esté bien porque el /bookings del final ni existe pero he probado metiendo otras y el error se mantiene. Además no sé cuál sería la correcta
-	public String showBookings(@PathVariable int petId, Map<String, Object> model) {
-		model.put("bookings", this.petService.findPetById(petId).getBookings());
-		return "bookingList";
-	}
+
 }

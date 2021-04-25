@@ -14,9 +14,6 @@ public class BookingValidator implements Validator {
 	public boolean supports(Class<?> clazz) {
 		return Booking.class.isAssignableFrom(clazz);
 	}
-
-	@Autowired
-	private BookingService bookingService;
 	
 	@Override
 	public void validate(Object target, Errors errors) {
@@ -34,24 +31,5 @@ public class BookingValidator implements Validator {
         	errors.rejectValue("endDate", "La fecha de fin debe ser posterior a la fecha de fecha de inicio", "La fecha de fin debe ser posterior a la fecha de fecha de inicio");
         }
         
-		List<Booking> hotels = this.bookingService.listBookingsByPetId(booking.getPet().getId());
-    	if (!(booking.getInitialDate() == null || booking.getEndDate() == null)) {
-    		for(int i=0;i<hotels.size();i++) {
-    			// A corresponde a la fecha de inicio de la reserva realizada previamente, B corresponde a la fecha de fin de la reserva realizada previamente
-    			// C corresponde a la fecha de inicio de la nueva reserva, D corresponde a la fecha de fin de la nueva reserva
-        		boolean AantesdeC = booking.getPet().getBookings().get(i).getInitialDate().isBefore(booking.getInitialDate());
-        		boolean BdespuesdeC = booking.getPet().getBookings().get(i).getEndDate().isAfter(booking.getInitialDate());
-        		boolean AantesdeD = booking.getPet().getBookings().get(i).getInitialDate().isBefore(booking.getEndDate());
-        		boolean BdespuesdeD = booking.getPet().getBookings().get(i).getEndDate().isAfter(booking.getEndDate());
-        		boolean AigualC = booking.getPet().getBookings().get(i).getInitialDate().equals(booking.getInitialDate());
-        		boolean BigualD = booking.getPet().getBookings().get(i).getEndDate().equals(booking.getEndDate());
-        		boolean AdespuesdeC = booking.getPet().getBookings().get(i).getInitialDate().isAfter(booking.getInitialDate());
-        		boolean BantesdeD = booking.getPet().getBookings().get(i).getEndDate().isBefore(booking.getEndDate());
-        		
-        		if((AantesdeC || AigualC) &&	BdespuesdeC || AantesdeD && (BdespuesdeD || BigualD) || (AigualC && BigualD) || (AdespuesdeC && BantesdeD)) {
-        			errors.rejectValue("endDate", "Existe una reserva para esta mascota en estas mismas fechas", "Existe una reserva para esta mascota en estas mismas fechas");
-        		}
-    		}
-    	}
 	}
 }
