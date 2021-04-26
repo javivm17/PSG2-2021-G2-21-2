@@ -28,6 +28,7 @@
                 </div>
                 <petclinic:inputField label="Nombre" name="name"/>
                 <petclinic:inputField label="Fecha de Nacimiento" name="birthDate"/>
+                <input type="hidden" name="inAdoption" value="0"/>
                 <div class="control-group">
                     <petclinic:selectField name="type" label="Tipo " names="${types}" size="5"/>
                 </div>

@@ -26,6 +26,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.AdoptionRequestsRepository;
+import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +64,15 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class OwnerServiceTests {                
         @Autowired
-	protected OwnerService ownerService;
+        protected OwnerService ownerService;
+        
+        @Autowired
+        protected  OwnerRepository ownerRepository;	
+        
+        @Autowired
+        protected  AdoptionRequestService adoptionRequestService;
+
+
 
 	@Test
 	void shouldFindOwnersByLastName() {
@@ -125,7 +135,7 @@ class OwnerServiceTests {
 	
 	@Test
 	@Transactional
-	void shouldDeleteOwner() {
+	void shouldDeleteOwnerWithoutRequests() {
 		Collection<Owner> owners = this.ownerService.findOwnerByLastName("Franklin");
 		final int found = owners.size();
 		
@@ -139,6 +149,31 @@ class OwnerServiceTests {
 		owners = this.ownerService.findOwnerByLastName("Franklin");
 		assertThat(owners.size()).isEqualTo(found - 1);
 		
+	}
+	
+	@Test
+	@Transactional
+	void shouldDeleteOwnerWithRequests() { 
+		Collection<Owner> owners = this.ownerService.findOwnerByLastName("Rodriquez");
+		final int found = owners.size();
+		
+		final Owner owner = this.ownerService.findOwnerById(3);
+		
+		this.ownerService.deleteOwner(owner);
+		
+		final Owner ownerdel = this.ownerService.findOwnerById(3);
+		assertThat(ownerdel).isNull();
+		
+		owners = this.ownerService.findOwnerByLastName("Rodriquez");
+		assertThat(owners.size()).isEqualTo(found - 1);
+		
+	}
+	
+	@Test
+	void shouldFindOwnerByUserName() {
+		Owner owner = ownerService.getOwnerByUserName("owner1");
+		assertThat(owner).isNotNull();
+
 	}
 
 }
