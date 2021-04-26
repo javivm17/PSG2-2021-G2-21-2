@@ -7,13 +7,12 @@
 
 <petclinic:layout pageName="donations">
     <jsp:body>
-        <h2><c:if test="${donation['new']}">Nueva </c:if>Donación</h2>
+        <h2>Donación para la causa "${cause.name}"</h2>
 
  
         <form:form modelAttribute="donation" class="form-horizontal">
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Cantidad" name="amount"/>
-                <petclinic:selectField label="Cliente" name="owner" names="${owners}" size="1"/>
             </div>
 
             <div class="form-group">

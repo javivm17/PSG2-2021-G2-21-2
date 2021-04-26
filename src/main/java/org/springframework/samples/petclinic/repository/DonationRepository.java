@@ -23,4 +23,7 @@ public interface DonationRepository extends Repository<Donation, Integer>{
 	
 	@Query("SELECT o FROM Owner o ORDER BY o.id")
 	List<Owner> findOwners();
+	
+	@Query("SELECT o FROM Owner o WHERE o.user.username = :username")
+	Owner findOwnerByUsername(@Param ("username") String username);
 }
