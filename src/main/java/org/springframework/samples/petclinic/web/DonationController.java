@@ -24,24 +24,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/causes/{causeId}")
 public class DonationController {
 
-	private final DonationService donationService;
-	private final CauseService causeService;
+	@Autowired
+	private DonationService donationService;
 	
 	@Autowired
-	public DonationController(final CauseService causeService,
-		final DonationService donationService) {
-		this.causeService = causeService;
-		this.donationService = donationService;
+	private CauseService causeService;
+	
+	@Autowired
+	private DonationValidator validator;
+
+	@InitBinder("donation")
+	public void initDonationBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(validator);
 	}
 
+	@InitBinder
+	public void setAllowedFields(final WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id, cause_id, owner_id");
+	}
+	
 	@ModelAttribute("cause")
 	public Cause findCause(@PathVariable("causeId") final int causeId) {
 		return this.causeService.findCauseById(causeId);
-	}
-	
-	@InitBinder
-	public void setAllowedFields(final WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id,cause_id, owner_id");
 	}
 	
 	@ModelAttribute("donation")

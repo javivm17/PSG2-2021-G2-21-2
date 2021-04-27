@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/causes")
 public class CauseController {
 
-	private final CauseService causeService;
+	@Autowired
+	private CauseService causeService;
 	
 	@Autowired
-	public CauseController(final CauseService causeService) {
-		this.causeService = causeService;
+	private CauseValidator validator;
+
+	@InitBinder("cause")
+	public void initCauseBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(validator);
 	}
 	
 	@GetMapping()
@@ -44,15 +48,14 @@ public class CauseController {
 	}
 	
 	@PostMapping(value = "/save")
-	public String processCreationForm(@Valid Cause cause, BindingResult result, ModelMap model) {	
-		cause.setClosed(false);
-		cause.setDonated(0);
+	public String processCreationForm(@Valid Cause cause, BindingResult result, ModelMap model) {
 		if (result.hasErrors()) {
 			model.addAttribute("cause", cause);
-			System.out.println("ERRORES: " + result.getAllErrors());
 			return "causes/causeNew";
 		}
 		else {
+			cause.setClosed(false);
+			cause.setDonated(0);
 			this.causeService.save(cause);
 			return "redirect:/causes";
 		}

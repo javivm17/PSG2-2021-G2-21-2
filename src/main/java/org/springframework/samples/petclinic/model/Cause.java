@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "causes")
 public class Cause extends NamedEntity{
 	
+	@NotBlank
 	private String description;
 	
 	@NotBlank
@@ -46,9 +47,7 @@ public class Cause extends NamedEntity{
 	}
 
 	public void setClosed(final boolean isClosed) {
-		System.out.println("ME CAGO EN LOS PUTOS ERRORES");
 		this.isClosed = isClosed;
-		System.out.println("ME CAGO EN LOS PUTOS ERRORES DEL COPON");
 	}
 
 	public Integer getTarget() {

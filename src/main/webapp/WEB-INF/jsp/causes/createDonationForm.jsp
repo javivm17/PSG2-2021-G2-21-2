@@ -11,9 +11,24 @@
 
  
         <form:form modelAttribute="donation" class="form-horizontal">
-            <div class="form-group has-feedback">
-                <petclinic:inputField label="Cantidad" name="amount"/>
-            </div>
+            <spring:bind path="amount">
+    		<c:set var="cssGroup" value="form-group ${status.error ? 'has-error' : '' }"/>
+   			<c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
+    		<div class="${cssGroup}">
+      		<label class="col-sm-2 control-label">Cantidad</label>
+
+     		<div class="col-sm-10">
+        	<input type="number" step="1" min="0" name="amount"> 
+        	<c:if test="${valid}">
+                   <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+        	</c:if>
+        	<c:if test="${status.error}">
+                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                <span class="help-inline">${status.errorMessage}</span>
+        	</c:if>
+      		</div>
+    		</div>
+			</spring:bind>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
