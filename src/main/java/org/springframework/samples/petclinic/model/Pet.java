@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -57,11 +58,14 @@ public class Pet extends NamedEntity {
 	@JoinColumn(name = "owner_id")
 	private Owner owner;
 
-	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Visit> visits;
 	
-	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Booking> bookings;
+	
+	@Column(name = "adoption")
+	private Integer inAdoption;
 
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
@@ -83,7 +87,7 @@ public class Pet extends NamedEntity {
 		return this.owner;
 	}
 
-	protected void setOwner(Owner owner) {
+	public void setOwner(Owner owner) {
 		this.owner = owner;
 	}
 
@@ -108,15 +112,31 @@ public class Pet extends NamedEntity {
 		getVisitsInternal().add(visit);
 		visit.setPet(this);
 	}
-
-	public Set<Booking> getBookings() {
-		return bookings;
-	}
+	
+	
 
 	public void setBookings(Set<Booking> bookings) {
 		this.bookings = bookings;
 	}
-
 	
+	public Set<Booking> getBookings() {
+		return bookings;
+	}
+
+	public List<Booking> getBookingsList() {
+        List<Booking> sortedBookings = new ArrayList<>(getBookings());
+        PropertyComparator.sort(sortedBookings, new MutableSortDefinition("initial_date", false, false));
+        return Collections.unmodifiableList(sortedBookings);
+	}
+	
+	public void setInAdoption(Boolean bol) {
+		if(bol == true) this.inAdoption = 1;
+		else this.inAdoption = 0; 
+	}
+
+	public Boolean getInAdoption() {
+		if(this.inAdoption == 1) return true;
+		else return false; 
+	}
 	
 }

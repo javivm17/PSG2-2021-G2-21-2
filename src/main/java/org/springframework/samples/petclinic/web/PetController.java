@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -164,8 +165,11 @@ public class PetController {
     		return "redirect:/oups";
     	}
     }
-
-
-        
-  
+   /* 
+    @GetMapping(value = "/adopt")
+    public String showAdoptablePetsList(Map<String, Object> model) {
+		model.put("pets", petService.findAdoptablePets());
+		return "adoption/listAdoptablePets";
+	}
+*/
 }

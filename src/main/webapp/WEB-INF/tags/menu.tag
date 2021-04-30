@@ -28,18 +28,44 @@
 					<span>Inicio</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="buscar dueños">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Buscar dueños</span>
-				</petclinic:menuItem>
-
+				<sec:authorize access="hasAuthority('admin')">
+					<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+						title="buscar dueÃ±os">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Buscar dueÃ±os</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
 					title="veterinarios">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarios</span>
 				</petclinic:menuItem>
-
+				
+				<sec:authorize access="hasAuthority('owner')">	
+					<petclinic:menuItem active="${name eq 'adopt'}" url="/adoption/list"
+						title="mascotas en adopcion">
+						<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+						<span>Adoptar</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAuthority('owner')">
+					<petclinic:menuItem active="${name eq 'owners'}" url="/owners/my_profile"
+						title="mi perfil">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span>Mi perfil</span>
+					</petclinic:menuItem>
+				</sec:authorize>
+        
+				<sec:authorize access="hasAuthority('owner')">
+          <petclinic:menuItem active="${name eq 'causes'}" url="/causes"
+            title="causas">
+            <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+            <span>Donaciones</span>
+          </petclinic:menuItem>
+        </sec:authorize>
+        
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
@@ -53,12 +79,12 @@
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
-					<li><a href="<c:url value="/login" />">Iniciar sesión</a></li>
+					<li><a href="<c:url value="/login" />">Iniciar sesiÃ³n</a></li>
 					<li><a href="<c:url value="/users/new" />">Registro</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -77,7 +103,7 @@
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Cerrar sesión</a>
+													class="btn btn-primary btn-block btn-sm">Cerrar sesiÃ³n</a>
 											</p>
 										</div>
 									</div>

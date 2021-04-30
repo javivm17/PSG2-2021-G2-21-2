@@ -18,12 +18,17 @@ package org.springframework.samples.petclinic.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,6 +39,8 @@ import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.AdoptionRequestsRepository;
+import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
@@ -72,10 +79,16 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 class PetServiceTests {        
         @Autowired
-	protected PetService petService;
+        protected PetService petService;
         
         @Autowired
-	protected OwnerService ownerService;	
+        private  PetRepository petRepository;
+        
+        @Autowired
+        protected OwnerService ownerService;	
+        
+        @Autowired
+        protected AdoptionRequestsRepository adoptionRequestsRepository;
 
 	@Test
 	void shouldFindPetWithCorrectId() {
@@ -226,7 +239,7 @@ class PetServiceTests {
 	
 	@Test
     @Transactional
-    void shouldDeletePet() {
+    void shouldDeletePetWithoutAdoptionrequests() {
         
         this.petService.deletePetById(1);
 
@@ -236,8 +249,19 @@ class PetServiceTests {
     }
 	
 	@Test
+    @Transactional
+    void shouldDeletePetWithAdoptionrequests() {
+        
+        this.petService.deletePetById(2);
+
+        Pet petDel = this.petService.findPetById(2);
+        assertThat(petDel).isNull();
+       
+    }
+	
+	@Test
 	@Transactional
-	void shouldDeleteVisitByIdPet() {
+	void shouldDeleteVisitByIdPetWithout() {
 		final Owner owner = this.ownerService.findOwnerById(6);
 		final Pet pet = owner.getPet("Max");
 		final int found = pet.getVisits().size();
@@ -249,5 +273,25 @@ class PetServiceTests {
 		assertThat(visitDel).isEqualTo(found - 1);
 	}
 	
+	@Test
+	@Transactional
+	void shouldFindAdoptablePets() {
+		final Owner owner = this.ownerService.findOwnerById(2);
+		final List<Pet> petsToAdoption = owner.getPets().stream().filter(x->x.getInAdoption()==true).collect(Collectors.toList());
+		final List<Pet> allPets = this.petService.findAdoptablePets(99999);
+		final List<Pet> adoptablePets = this.petService.findAdoptablePets(2);
+		
+		assertEquals(allPets.size()-adoptablePets.size(), petsToAdoption.size());
+		assertEquals(petsToAdoption.size(), 1);
+		assertTrue(allPets.containsAll(petsToAdoption));
+		assertTrue(allPets.containsAll(adoptablePets));
+	}
+	
+	@Test
+	@Transactional
+	void shouldFindOwners() {
+		final List<Owner> allOwners= this.petService.findOwners();
+		assertTrue(allOwners.size() == 10);
+	}
  
 }

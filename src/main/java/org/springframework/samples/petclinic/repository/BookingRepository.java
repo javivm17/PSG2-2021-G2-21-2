@@ -8,9 +8,12 @@ import org.springframework.samples.petclinic.model.Booking;
 
 public interface BookingRepository extends Repository<Booking, Integer> {
 
-	void save(Booking booking) throws DataAccessException;
+	Booking save(Booking booking) throws DataAccessException;
 	
 	void deleteById(int id) throws DataAccessException;
 	
-	List<Booking>findAll();
+	List<Booking> findAll();
+		
+	List<Booking> findBookingsByPetId(Integer petId);
+    	
 }

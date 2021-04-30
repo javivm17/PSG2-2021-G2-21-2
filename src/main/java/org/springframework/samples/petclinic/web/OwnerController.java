@@ -15,17 +15,22 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Adoption;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,11 +57,14 @@ public class OwnerController {
 	private final OwnerService ownerService;
 	
 	private final UserService userService;
+	
+	private final AdoptionRequestService adoptionRequestService;
 
 	@Autowired
-	public OwnerController(final OwnerService ownerService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public OwnerController(final OwnerService ownerService, final UserService userService, final AuthoritiesService authoritiesService, AdoptionRequestService adoptionRequestService) {
 		this.ownerService = ownerService;
 		this.userService = null;
+		this.adoptionRequestService= adoptionRequestService;
 	}
 
 	@InitBinder
@@ -143,22 +151,39 @@ public class OwnerController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
-	public ModelAndView showOwner(@PathVariable("ownerId") final int ownerId) {
+	public ModelAndView showOwner(@PathVariable("ownerId") final int ownerId, Principal principal) {
+		Owner owner = this.ownerService.findOwnerById(ownerId);
 		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
+		mav.addObject(owner);
+		Integer pendingRequests = adoptionRequestService.getRequests(owner).size(); 
+		mav.addObject("requests", pendingRequests);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/owners/{ownerId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
-	public String deleteOwner(@PathVariable("ownerId") final int ownerId){
+	public String deleteOwner(@PathVariable("ownerId") final int ownerId, Principal principal){
 		try {
 			final Owner owner = this.ownerService.findOwnerById(ownerId);
+			Owner ownerLogeado = ownerService.getOwnerByUserName(principal.getName());
 			this.ownerService.deleteOwner(owner);
-			return "redirect:/owners";
+			//If the owner logged is the same than the owner is going to be deleted the session will finish.
+			if(owner.getId().equals(ownerLogeado.getId())) SecurityContextHolder.clearContext();
+			return "redirect:/";
 		}
 		catch(final DataAccessException d) {
 			return "redirect:/oups";
 		}
+	}
+	
+	
+	@GetMapping(value="/owners/my_profile")
+	public ModelAndView getMyProfile(Principal principal) {
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		Integer pendingRequests = adoptionRequestService.getRequests(owner).size(); 
+		mav.addObject("requests", pendingRequests);
+		return mav;		
 	}
 
 }

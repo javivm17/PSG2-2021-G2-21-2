@@ -21,6 +21,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 
@@ -54,6 +55,15 @@ public interface PetRepository extends Repository<Pet, Integer> {
 	 */
 	void save(Pet pet) throws DataAccessException;
 	
-	void deleteById(int id) throws DataAccessException; 
-
+	void deleteById(int id) throws DataAccessException;
+	
+	/**
+	 * Retrieve all <code>Pet</code>s from the data store.
+	 * @return a <code>Collection</code> of <code>Pet</code>s
+	 */
+	@Query("SELECT pets FROM Pet pets, Owner owners WHERE pets.inAdoption = 1 AND pets.owner.id = owners.id AND pets.owner.id != ?1")
+	List<Pet> findAdoptablePets(Integer id) throws DataAccessException;
+	
+	@Query("SELECT own FROM Owner own")
+	List<Owner> allOwners() throws DataAccessException;
 }

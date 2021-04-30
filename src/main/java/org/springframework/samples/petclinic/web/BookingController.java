@@ -56,6 +56,11 @@ public class BookingController {
 			return "pets/createBookingForm";
 		}
 		else {
+			boolean isOverlapped = this.bookingService.isOverlapped(booking);
+			if(isOverlapped) {
+    			result.rejectValue("endDate", "Existe una reserva para esta mascota en estas mismas fechas", "Existe una reserva para esta mascota en estas mismas fechas");
+    			return "pets/createBookingForm";				
+			}
 			this.bookingService.saveBooking(booking);
 			return "redirect:/owners/{ownerId}"; 
 		}
@@ -66,6 +71,5 @@ public class BookingController {
 		bookingService.deleteBooking(bookingId);
 		return "redirect:/owners/{ownerId}";
 	}
-		
-	
+
 }
