@@ -21,45 +21,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class BookingController {
 
-	private BookingService bookingService;
+	private final BookingService bookingService;
 	
-	private  PetService petService;
+	private final  PetService petService;
 
-
+	private static String createBookingFormView = "pets/createBookingForm";
+	
 	@Autowired
-	public BookingController(BookingService bookingService, PetService petService) {
+	public BookingController(final BookingService bookingService, final PetService petService) {
 		this.bookingService = bookingService;
 		this.petService = petService;
 	}
 	
 	@InitBinder("booking")
-	public void initBookingBinder(WebDataBinder dataBinder) {
+	public void initBookingBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new BookingValidator());
 	}
 	
 	@ModelAttribute("booking")
-	public Booking loadPetWithVisit(@PathVariable("petId") int petId) {
-		Booking booking = new Booking();
-		Pet pet = petService.findPetById(petId);		
+	public Booking loadPetWithVisit(@PathVariable("petId") final int petId) {
+		final Booking booking = new Booking();
+		final Pet pet = this.petService.findPetById(petId);		
 		booking.setPet(pet);
 		return booking;
 	}
 	
 	@GetMapping(value = "/owners/*/pets/{petId}/booking/new")
-	public String showForm(@PathVariable("petId") int petId, Map<String, Object> model) {
-		return "pets/createBookingForm"; 
+	public String showForm(@PathVariable("petId") final int petId, final Map<String, Object> model) {
+		return BookingController.createBookingFormView; 
 	}
 	
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/booking/new")
-	public String processNewVisitForm(@Valid Booking booking, BindingResult result) {
+	public String processNewVisitForm(@Valid final Booking booking, final BindingResult result) {
 		if (result.hasErrors()) {
-			return "pets/createBookingForm";
+			return BookingController.createBookingFormView;
 		}
 		else {
-			boolean isOverlapped = this.bookingService.isOverlapped(booking);
+			final boolean isOverlapped = this.bookingService.isOverlapped(booking);
 			if(isOverlapped) {
     			result.rejectValue("endDate", "Existe una reserva para esta mascota en estas mismas fechas", "Existe una reserva para esta mascota en estas mismas fechas");
-    			return "pets/createBookingForm";				
+    			return BookingController.createBookingFormView;				
 			}
 			this.bookingService.saveBooking(booking);
 			return "redirect:/owners/{ownerId}"; 
@@ -67,8 +68,8 @@ public class BookingController {
 	}
 	
 	@GetMapping("/owners/{ownerId}/pets/{petId}/booking/delete/{bookingId}")
-	public String deleteBooking(@PathVariable("bookingId") int bookingId,@PathVariable("ownerId") int ownerId) {
-		bookingService.deleteBooking(bookingId);
+	public String deleteBooking(@PathVariable("bookingId") final int bookingId,@PathVariable("ownerId") final int ownerId) {
+		this.bookingService.deleteBooking(bookingId);
 		return "redirect:/owners/{ownerId}";
 	}
 

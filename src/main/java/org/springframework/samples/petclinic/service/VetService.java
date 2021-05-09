@@ -35,46 +35,46 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VetService {
 
-	private VetRepository vetRep;
+	private final VetRepository vetRep;
 
 
 	@Autowired
-	public VetService(VetRepository vetRepository) {
+	public VetService(final VetRepository vetRepository) {
 		this.vetRep = vetRepository;
 	}
 	
 	@Transactional(readOnly=true)
 	public List<Vet> findVets() {
-		List<Vet> res = new ArrayList<Vet>();
-		vetRep.findAll().forEach(x -> res.add(x));
+		final List<Vet> res = new ArrayList<>();
+		this.vetRep.findAll().forEach(x -> res.add(x));
 		return res;
 	}
 	
 	@Transactional(readOnly=true)
-	public  Optional<Vet> findVetById(int id){ 
-		return vetRep.findById(id);
+	public  Optional<Vet> findVetById(final int id){ 
+		return this.vetRep.findById(id);
 	}
 
 	@Transactional
-	public  void save(Vet vet) {   
-		vetRep.save(vet);
+	public  void save(final Vet vet) {   
+		this.vetRep.save(vet);
 	}
 
 	@Transactional
-	public  void delete(Vet vet) { 
-		vetRep.delete(vet);
+	public  void delete(final Vet vet) { 
+		this.vetRep.delete(vet);
 	}
 	
 	@Transactional(readOnly=true)
 	public List<Specialty> findSpecialties() {
-		return vetRep.findSpecialties();
+		return this.vetRep.findSpecialties();
 	}
 	
 	@Transactional(readOnly=true)
-	public List<Specialty> findMissingSpecialties(Vet vet) {
+	public List<Specialty> findMissingSpecialties(final Vet vet) {
 		if (vet == null)
-			return vetRep.findSpecialties();
-		List<Specialty> all = vetRep.findSpecialties();
+			return this.vetRep.findSpecialties();
+		final List<Specialty> all = this.vetRep.findSpecialties();
 		all.removeAll(vet.getSpecialties());
 		return all;
 	}

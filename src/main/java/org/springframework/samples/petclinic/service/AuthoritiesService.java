@@ -35,29 +35,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthoritiesService {
 
-	private AuthoritiesRepository authoritiesRepository;
-	private UserService userService;
+	private final AuthoritiesRepository authoritiesRepository;
+	private final UserService userService;
 
 	@Autowired
-	public AuthoritiesService(AuthoritiesRepository authoritiesRepository,UserService userService) {
+	public AuthoritiesService(final AuthoritiesRepository authoritiesRepository,final UserService userService) {
 		this.authoritiesRepository = authoritiesRepository;
 		this.userService = userService;
 	}
 
 	@Transactional
-	public void saveAuthorities(Authorities authorities) throws DataAccessException {
-		authoritiesRepository.save(authorities);
+	public void saveAuthorities(final Authorities authorities) throws DataAccessException {
+		this.authoritiesRepository.save(authorities);
 	}
 	
 	@Transactional
-	public void saveAuthorities(String username, String role) throws DataAccessException {
-		Authorities authority = new Authorities();
-		Optional<User> user = userService.findUser(username);
+	public void saveAuthorities(final String username, final String role) throws DataAccessException {
+		final Authorities authority = new Authorities();
+		final Optional<User> user = this.userService.findUser(username);
 		if(user.isPresent()) {
 			authority.setUser(user.get());
 			authority.setAuthority(role);
-			//user.get().getAuthorities().add(authority);
-			authoritiesRepository.save(authority);
+			this.authoritiesRepository.save(authority);
 		}else
 			throw new DataAccessException("User '"+username+"' not found!") {};
 	}

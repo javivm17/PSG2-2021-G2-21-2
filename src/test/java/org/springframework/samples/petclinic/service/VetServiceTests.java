@@ -69,16 +69,16 @@ class VetServiceTests {
 		final Iterator<Vet> vets = this.vetService.findVets().iterator();
 
 		final Vet james = vets.next();
-		Assertions.assertThat(james.getFirstName().equals("James"));
-		Assertions.assertThat(james.getLastName().equals("Carter"));
-		Assertions.assertThat(james.getNrOfSpecialties() == 0);
+		Assertions.assertThat(james.getFirstName()).isEqualTo("James");
+		Assertions.assertThat(james.getLastName()).isEqualTo("Carter");
+		Assertions.assertThat(james.getNrOfSpecialties()).isZero();
 		
-		Assertions.assertThat(vets.next().getFirstName().equals("Helen"));
-		Assertions.assertThat(vets.next().getFirstName().equals("Linda"));
-		Assertions.assertThat(vets.next().getFirstName().equals("Rafael"));
-		Assertions.assertThat(vets.next().getFirstName().equals("Henry"));
-		Assertions.assertThat(vets.next().getFirstName().equals("Sharon"));
-		Assertions.assertThat(!vets.hasNext());
+		Assertions.assertThat(vets.next().getFirstName()).isEqualTo("Helen");
+		Assertions.assertThat(vets.next().getFirstName()).isEqualTo("Linda");
+		Assertions.assertThat(vets.next().getFirstName()).isEqualTo("Rafael");
+		Assertions.assertThat(vets.next().getFirstName()).isEqualTo("Henry");
+		Assertions.assertThat(vets.next().getFirstName()).isEqualTo("Sharon");
+		org.junit.jupiter.api.Assertions.assertFalse(vets.hasNext());
 		
 	}
 
@@ -99,9 +99,9 @@ class VetServiceTests {
 		sharon.addSpecialty(list.get(0));
 		sharon.addSpecialty(list.get(1));
 		this.vetService.save(sharon);
-		Assertions.assertThat(sharon.getNrOfSpecialties()==2);
-		Assertions.assertThat(sharon.getSpecialties().get(0).getName()=="radiologia");
-		Assertions.assertThat(sharon.getSpecialties().get(0).getName()=="odontologia");
+		Assertions.assertThat(sharon.getNrOfSpecialties()).isEqualTo(2);
+		Assertions.assertThat(sharon.getSpecialties().get(0).getName()=="cirugia");
+        Assertions.assertThat(sharon.getSpecialties().get(0).getName()=="odontologia");
 	}
 	
 	@Test
@@ -109,30 +109,30 @@ class VetServiceTests {
 	void deleteTest() {
 		final Vet linda = this.vetService.findVetById(3).get();
 		this.vetService.delete(linda);
-		Assertions.assertThat(!this.vetService.findVetById(3).isPresent());
+		org.junit.jupiter.api.Assertions.assertFalse(this.vetService.findVetById(3).isPresent());
 	}
 	
 	@Test
 	@Transactional
 	void findSpecialtiesTest() {
 		final List<Specialty> list = this.vetService.findSpecialties();
-		Assertions.assertThat(list.size()==3);
-		Assertions.assertThat(list.get(0).getName().equals("radiologia"));
-		Assertions.assertThat(list.get(1).getName().equals("cirugia"));
-		Assertions.assertThat(list.get(2).getName().equals("odontologia"));
+		Assertions.assertThat(list).hasSize(3);
+		Assertions.assertThat(list.get(0).getName()).hasToString("radiologia");
+		Assertions.assertThat(list.get(1).getName()).hasToString("cirugia");
+		Assertions.assertThat(list.get(2).getName()).hasToString("odontologia");
 	}
 	
 	@Test
 	@Transactional
 	void findMissingSpecialtiesTest() {
 		final Vet helen = this.vetService.findVetById(2).get();
-		Assertions.assertThat(helen.getNrOfSpecialties() == 1);
-		Assertions.assertThat(helen.getSpecialties().get(0).getName().equals("radiologia"));
+		Assertions.assertThat(helen.getNrOfSpecialties()).isEqualTo(1);
+		Assertions.assertThat(helen.getSpecialties().get(0).getName()).hasToString("radiologia");
 		
 		final List<Specialty> specs = this.vetService.findMissingSpecialties(helen);
-		Assertions.assertThat(specs.size() == 2);
-		Assertions.assertThat(specs.get(0).getName().equals("cirugia"));
-		Assertions.assertThat(specs.get(1).getName().equals("odontologia"));
+		Assertions.assertThat(specs).hasSize(2);
+		Assertions.assertThat(specs.get(0).getName()).hasToString("cirugia");
+		Assertions.assertThat(specs.get(1).getName()).hasToString("odontologia");
 	}
 	
 	@Test
@@ -140,10 +140,10 @@ class VetServiceTests {
 	void findMissingSpecialtiesNullVetTest() {
 		final List<Specialty> specs = this.vetService.findMissingSpecialties(null);
 		
-		Assertions.assertThat(specs.size() == 3);
-		Assertions.assertThat(specs.get(0).getName().equals("radiologia"));
-		Assertions.assertThat(specs.get(1).getName().equals("cirugia"));
-		Assertions.assertThat(specs.get(2).getName().equals("odontologia"));
+		Assertions.assertThat(specs).hasSize(3);
+		Assertions.assertThat(specs.get(0).getName()).hasToString("radiologia");
+		Assertions.assertThat(specs.get(1).getName()).hasToString("cirugia");
+		Assertions.assertThat(specs.get(2).getName()).hasToString("odontologia");
 	}
 	
 

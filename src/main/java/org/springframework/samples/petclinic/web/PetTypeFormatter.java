@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.service.PetService;
-import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,19 +46,19 @@ public class PetTypeFormatter implements Formatter<PetType> {
 	private final PetService peService;
 
 	@Autowired
-	public PetTypeFormatter(PetService petService) {
+	public PetTypeFormatter(final PetService petService) {
 		this.peService = petService;
 	}
 
 	@Override
-	public String print(PetType petType, Locale locale) {
+	public String print(final PetType petType, final Locale locale) {
 		return petType.getName();
 	}
 
 	@Override
-	public PetType parse(String text, Locale locale) throws ParseException {
-		Collection<PetType> findPetTypes = this.peService.findPetTypes();
-		for (PetType type : findPetTypes) {
+	public PetType parse(final String text, final Locale locale) throws ParseException {
+		final Collection<PetType> findPetTypes = this.peService.findPetTypes();
+		for (final PetType type : findPetTypes) {
 			if (type.getName().equals(text)) {
 				return type;
 			}

@@ -16,7 +16,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -51,9 +50,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class PetController {
 
 	private static final String VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm";
-
+	private static final String ownerInfoView=  "redirect:/owners/{ownerId}";
+	
 	private final PetService petService;
-        private final OwnerService ownerService;
+    private final OwnerService ownerService;
 
 	@Autowired
 	public PetController(final PetService petService, final OwnerService ownerService) {
@@ -70,16 +70,6 @@ public class PetController {
 	public Owner findOwner(@PathVariable("ownerId") final int ownerId) {
 		return this.ownerService.findOwnerById(ownerId);
 	}
-        
-        /*@ModelAttribute("pet")
-	public Pet findPet(@PathVariable("petId") Integer petId) {
-            Pet result=null;
-		if(petId!=null)
-                    result=this.clinicService.findPetById(petId);
-                else
-                    result=new Pet();
-            return result;
-	}*/
                 
 	@InitBinder("owner")
 	public void initOwnerBinder(final WebDataBinder dataBinder) {
@@ -113,7 +103,7 @@ public class PetController {
                         result.rejectValue("name", "duplicate", "already exists");
                         return PetController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
                     }
-                    return "redirect:/owners/{ownerId}";
+                    return PetController.ownerInfoView;
 		}
 	}
 
@@ -149,7 +139,7 @@ public class PetController {
                         result.rejectValue("name", "duplicate", "already exists");
                         return PetController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
                     }
-			return "redirect:/owners/{ownerId}";
+			return PetController.ownerInfoView;
 		}
 	}
         
@@ -159,17 +149,10 @@ public class PetController {
     		final Pet petToRemove = this.petService.findPetById(petId);
     		owner.removePet(petToRemove);
     		this.petService.deletePetById(petId);
-    		return "redirect:/owners/{ownerId}";
+    		return PetController.ownerInfoView;
     	}
     	catch(final DataAccessException d) {
     		return "redirect:/oups";
     	}
     }
-   /* 
-    @GetMapping(value = "/adopt")
-    public String showAdoptablePetsList(Map<String, Object> model) {
-		model.put("pets", petService.findAdoptablePets());
-		return "adoption/listAdoptablePets";
-	}
-*/
 }
