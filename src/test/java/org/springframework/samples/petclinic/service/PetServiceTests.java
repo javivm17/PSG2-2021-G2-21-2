@@ -17,12 +17,6 @@ package org.springframework.samples.petclinic.service;
 
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +34,6 @@ import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.AdoptionRequestsRepository;
-import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
@@ -82,9 +75,6 @@ class PetServiceTests {
         protected PetService petService;
         
         @Autowired
-        private  PetRepository petRepository;
-        
-        @Autowired
         protected OwnerService ownerService;	
         
         @Autowired
@@ -93,8 +83,8 @@ class PetServiceTests {
 	@Test
 	void shouldFindPetWithCorrectId() {
 		final Pet pet7 = this.petService.findPetById(7);
-		assertThat(pet7.getName()).startsWith("Samantha");
-		assertThat(pet7.getOwner().getFirstName()).isEqualTo("Jean");
+		org.assertj.core.api.Assertions.assertThat(pet7.getName()).startsWith("Samantha");
+		org.assertj.core.api.Assertions.assertThat(pet7.getOwner().getFirstName()).isEqualTo("Jean");
 
 	}
 
@@ -103,14 +93,14 @@ class PetServiceTests {
 		final Collection<PetType> petTypes = this.petService.findPetTypes();
 
 		final PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);
-		assertThat(petType1.getName()).isEqualTo("gato");
+		org.assertj.core.api.Assertions.assertThat(petType1.getName()).isEqualTo("gato");
 		final PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);
-		assertThat(petType4.getName()).isEqualTo("serpiente");
+		org.assertj.core.api.Assertions.assertThat(petType4.getName()).isEqualTo("serpiente");
 	}
 
 	@Test
 	@Transactional
-	public void shouldInsertPetIntoDatabaseAndGenerateId() {
+	void shouldInsertPetIntoDatabaseAndGenerateId() {
 		Owner owner6 = this.ownerService.findOwnerById(6);
 		final int found = owner6.getPets().size();
 
@@ -120,7 +110,7 @@ class PetServiceTests {
 		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
 		owner6.addPet(pet);
-		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
+		org.assertj.core.api.Assertions.assertThat(owner6.getPets().size()).isEqualTo(found + 1);
 
             try {
                 this.petService.savePet(pet);
@@ -130,14 +120,14 @@ class PetServiceTests {
 		this.ownerService.saveOwner(owner6);
 
 		owner6 = this.ownerService.findOwnerById(6);
-		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
+		org.assertj.core.api.Assertions.assertThat(owner6.getPets().size()).isEqualTo(found + 1);
 		// checks that id has been generated
-		assertThat(pet.getId()).isNotNull();
+		org.assertj.core.api.Assertions.assertThat(pet.getId()).isNotNull();
 	}
 	
 	@Test
 	@Transactional
-	public void shouldThrowExceptionInsertingPetsWithTheSameName() {
+	void shouldThrowExceptionInsertingPetsWithTheSameName() {
 		final Owner owner6 = this.ownerService.findOwnerById(6);
 		final Pet pet = new Pet();
 		pet.setName("wario");
@@ -164,7 +154,7 @@ class PetServiceTests {
 
 	@Test
 	@Transactional
-	public void shouldUpdatePetName() throws Exception {
+	void shouldUpdatePetName() throws Exception {
 		Pet pet7 = this.petService.findPetById(7);
 		final String oldName = pet7.getName();
 
@@ -173,12 +163,12 @@ class PetServiceTests {
 		this.petService.savePet(pet7);
 
 		pet7 = this.petService.findPetById(7);
-		assertThat(pet7.getName()).isEqualTo(newName);
+		org.assertj.core.api.Assertions.assertThat(pet7.getName()).isEqualTo(newName);
 	}
 	
 	@Test
 	@Transactional
-	public void shouldThrowExceptionUpdatingPetsWithTheSameName() {
+	void shouldThrowExceptionUpdatingPetsWithTheSameName() {
 		final Owner owner6 = this.ownerService.findOwnerById(6);
 		final Pet pet = new Pet();
 		pet.setName("wario");
@@ -209,7 +199,7 @@ class PetServiceTests {
 
 	@Test
 	@Transactional
-	public void shouldAddNewVisitForPet() {
+	void shouldAddNewVisitForPet() {
 		Pet pet7 = this.petService.findPetById(7);
 		final int found = pet7.getVisits().size();
 		final Visit visit = new Visit();
@@ -223,18 +213,18 @@ class PetServiceTests {
             }
 
 		pet7 = this.petService.findPetById(7);
-		assertThat(pet7.getVisits().size()).isEqualTo(found + 1);
-		assertThat(visit.getId()).isNotNull();
+		org.assertj.core.api.Assertions.assertThat(pet7.getVisits().size()).isEqualTo(found + 1);
+		org.assertj.core.api.Assertions.assertThat(visit.getId()).isNotNull();
 	}
 
 	@Test
 	void shouldFindVisitsByPetId() throws Exception {
 		final Collection<Visit> visits = this.petService.findVisitsByPetId(7);
-		assertThat(visits.size()).isEqualTo(2);
+		org.assertj.core.api.Assertions.assertThat(visits).hasSize(2);
 		final Visit[] visitArr = visits.toArray(new Visit[visits.size()]);
-		assertThat(visitArr[0].getPet()).isNotNull();
-		assertThat(visitArr[0].getDate()).isNotNull();
-		assertThat(visitArr[0].getPet().getId()).isEqualTo(7);
+		org.assertj.core.api.Assertions.assertThat(visitArr[0].getPet()).isNotNull();
+		org.assertj.core.api.Assertions.assertThat(visitArr[0].getDate()).isNotNull();
+		org.assertj.core.api.Assertions.assertThat(visitArr[0].getPet().getId()).isEqualTo(7);
 	}
 	
 	@Test
@@ -244,7 +234,7 @@ class PetServiceTests {
         this.petService.deletePetById(1);
 
         final Pet petDel = this.petService.findPetById(1);
-        assertThat(petDel).isNull();
+        org.assertj.core.api.Assertions.assertThat(petDel).isNull();
        
     }
 	
@@ -254,8 +244,8 @@ class PetServiceTests {
         
         this.petService.deletePetById(2);
 
-        Pet petDel = this.petService.findPetById(2);
-        assertThat(petDel).isNull();
+        final Pet petDel = this.petService.findPetById(2);
+        org.assertj.core.api.Assertions.assertThat(petDel).isNull();
        
     }
 	
@@ -270,7 +260,7 @@ class PetServiceTests {
 		
 		
 		final int visitDel = this.petService.findVisitsByPetId(8).size();
-		assertThat(visitDel).isEqualTo(found - 1);
+		org.assertj.core.api.Assertions.assertThat(visitDel).isEqualTo(found - 1);
 	}
 	
 	@Test
@@ -281,17 +271,17 @@ class PetServiceTests {
 		final List<Pet> allPets = this.petService.findAdoptablePets(99999);
 		final List<Pet> adoptablePets = this.petService.findAdoptablePets(2);
 		
-		assertEquals(allPets.size()-adoptablePets.size(), petsToAdoption.size());
-		assertEquals(petsToAdoption.size(), 1);
-		assertTrue(allPets.containsAll(petsToAdoption));
-		assertTrue(allPets.containsAll(adoptablePets));
+		Assertions.assertEquals(allPets.size()-adoptablePets.size(), petsToAdoption.size());
+		 org.assertj.core.api.Assertions.assertThat(petsToAdoption).hasSize(1);
+		Assertions.assertTrue(allPets.containsAll(petsToAdoption));
+		Assertions.assertTrue(allPets.containsAll(adoptablePets));
 	}
 	
 	@Test
 	@Transactional
 	void shouldFindOwners() {
 		final List<Owner> allOwners= this.petService.findOwners();
-		assertTrue(allOwners.size() == 10);
+		 org.assertj.core.api.Assertions.assertThat(allOwners).hasSize(10);
 	}
  
 }

@@ -15,6 +15,11 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Specialty;
@@ -32,11 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
-
 /**
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -48,21 +48,22 @@ import javax.validation.Valid;
 public class VetController {
 
 	private static final String FORM = "vets/createOrUpdateVetForm";
+	private static final String haveNotSpec = "haveNotSpec";
 	
 	private final VetService vetService;
 
 	@Autowired
-	public VetController(VetService clinicService) {
+	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
 	}
 
 	@GetMapping()
-	public String showVetList(Map<String, Object> model) {
+	public String showVetList(final Map<String, Object> model) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
-		Vets vets = new Vets();
-		vets.getVetList().addAll(vetService.findVets());
+		final Vets vets = new Vets();
+		vets.getVetList().addAll(this.vetService.findVets());
 		model.put("vets", vets);
 		return "vets/vetList";
 	}
@@ -73,35 +74,35 @@ public class VetController {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
 		// so it is simpler for JSon/Object mapping
-		Vets vets = new Vets();
+		final Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
 	}
 	
 	
 	@GetMapping(value = "/new")
-	public String initCreationForm(Vet vet, ModelMap model) {
-		model.put("haveNotSpec", vetService.findMissingSpecialties(null));
+	public String initCreationForm(final Vet vet, final ModelMap model) {
+		model.put(VetController.haveNotSpec, this.vetService.findMissingSpecialties(null));
 		model.put("vet", new Vet());
 		return "vets/vetNew";
 	}
 
 	@PostMapping(value = "/save")
-	public String processCreationForm(@Valid Vet vet, BindingResult result, ModelMap model) {		
+	public String processCreationForm(@Valid final Vet vet, final BindingResult result, final ModelMap model) {		
 		if (result.hasErrors()) {
-			model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
+			model.put(VetController.haveNotSpec, this.vetService.findMissingSpecialties(vet));
 			model.put("vet", vet);
 			return "vets/vetNew";
 		}
 		else {
-			vetService.save(vet);
+			this.vetService.save(vet);
 			return "redirect:/vets";
 		}
 	}
 
 	@GetMapping(value = "/{vetId}")
-	public String showVetInfo(@PathVariable("vetId") int vetId, Map<String, Object> model) {
-		Vet vet = vetService.findVetById(vetId).orElse(null);
+	public String showVetInfo(@PathVariable("vetId") final int vetId, final Map<String, Object> model) {
+		final Vet vet = this.vetService.findVetById(vetId).orElse(null);
 		if (vet == null)
 			return "vets/vetList";
 		else {
@@ -112,43 +113,43 @@ public class VetController {
 	}
 	
 	@RequestMapping(value = "/{vetId}/add/{specId}", method={RequestMethod.PUT, RequestMethod.GET})
-	public String addSpecialties(@PathVariable("vetId") int vetId,
-			@PathVariable("specId") int specId, Map<String, Object> model) {
-		Vet vet = vetService.findVetById(vetId).get();
-		List<Specialty> specs = vetService.findSpecialties();
-		Specialty sp = EntityUtils.getById(specs, Specialty.class, specId);
+	public String addSpecialties(@PathVariable("vetId") final int vetId,
+			@PathVariable("specId") final int specId, final Map<String, Object> model) {
+		final Vet vet = this.vetService.findVetById(vetId).get();
+		final List<Specialty> specs = this.vetService.findSpecialties();
+		final Specialty sp = EntityUtils.getById(specs, Specialty.class, specId);
 		vet.addSpecialty(sp);
 		model.put("vet", vet);
-		vetService.save(vet);
-		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
-		return FORM;
+		this.vetService.save(vet);
+		model.put(VetController.haveNotSpec, this.vetService.findMissingSpecialties(vet));
+		return VetController.FORM;
 	}
 	
 	@RequestMapping(value = "/{vetId}/delete/{specId}", method={RequestMethod.DELETE, RequestMethod.GET})
-	public String deleteSpecialties(@PathVariable("vetId") int vetId,
-			@PathVariable("specId") int specId, Map<String, Object> model) {
-		Vet vet = vetService.findVetById(vetId).get();
-		List<Specialty> specs = vetService.findSpecialties();
-		Specialty sp = EntityUtils.getById(specs, Specialty.class, specId);
+	public String deleteSpecialties(@PathVariable("vetId") final int vetId,
+			@PathVariable("specId") final int specId, final Map<String, Object> model) {
+		final Vet vet = this.vetService.findVetById(vetId).get();
+		final List<Specialty> specs = this.vetService.findSpecialties();
+		final Specialty sp = EntityUtils.getById(specs, Specialty.class, specId);
 		vet.deleteSpecialty(sp);
 		model.put("vet", vet);
-		vetService.save(vet);
-		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
-		return FORM;
+		this.vetService.save(vet);
+		model.put(VetController.haveNotSpec, this.vetService.findMissingSpecialties(vet));
+		return VetController.FORM;
 	}
 	
 	@GetMapping(value = "/{vetId}/edit")
-	public String initUpdateForm(@PathVariable("vetId") int vetId, ModelMap model) {
-		Vet vet = this.vetService.findVetById(vetId).get();
-		model.put("haveNotSpec", vetService.findMissingSpecialties(vet));
+	public String initUpdateForm(@PathVariable("vetId") final int vetId, final ModelMap model) {
+		final Vet vet = this.vetService.findVetById(vetId).get();
+		model.put(VetController.haveNotSpec, this.vetService.findMissingSpecialties(vet));
 		model.put("vet", vet);
-		return FORM;
+		return VetController.FORM;
 	}
 	
 	@RequestMapping(value = "/{vetId}/delete", method={RequestMethod.DELETE, RequestMethod.GET})
     public String deleteVet(@PathVariable("vetId") final int vetId){
         try {
-        	Vet vet = this.vetService.findVetById(vetId).get();
+        	final Vet vet = this.vetService.findVetById(vetId).get();
             this.vetService.delete(vet);
             return "redirect:/vets";
         }

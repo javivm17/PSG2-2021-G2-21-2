@@ -8,35 +8,35 @@ import org.springframework.validation.Validator;
 @Component
 public class CauseValidator implements Validator{
 
+	private final String required = "Campo requerido";
+	
 	@Override
-	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
+	public boolean supports(final Class<?> clazz) {
 		return Cause.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
-	public void validate(Object target, Errors errors) {
-		// TODO Auto-generated method stub
-		Cause cause = (Cause) target;
-		String name = cause.getName();
-		String desc = cause.getDescription();
-		String organization = cause.getOrganization();
-		Integer donTarget = cause.getTarget();
+	public void validate(final Object target, final Errors errors) {
+		final Cause cause = (Cause) target;
+		final String name = cause.getName();
+		final String desc = cause.getDescription();
+		final String organization = cause.getOrganization();
+		final Integer donTarget = cause.getTarget();
 		//Name validation
 		if (name == null || name.trim().equals("")) {
-			errors.rejectValue("name", "Campo requerido", "Campo requerido");
+			errors.rejectValue("name", this.required,this.required);
 		}
 		//Description validation
 		if (desc == null || desc.trim().equals("")) {
-			errors.rejectValue("description", "Campo requerido", "Campo requerido");
+			errors.rejectValue("description", this.required, this.required);
 		}
 		//Organization validation
 		if (organization == null || organization.trim().equals("")) {
-			errors.rejectValue("organization", "Campo requerido", "Campo requerido");
+			errors.rejectValue("organization",this.required, this.required);
 		}
 		//Target validation
 		if (donTarget == null) {
-			errors.rejectValue("target", "Campo requerido", "Campo requerido");
+			errors.rejectValue("target", this.required, this.required);
 		}
 		else if(donTarget<=0) {
 			errors.rejectValue("target", "La cantidad debe ser positiva", "La cantidad debe ser positiva");

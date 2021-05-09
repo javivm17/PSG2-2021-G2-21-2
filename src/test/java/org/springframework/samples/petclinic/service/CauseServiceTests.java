@@ -74,7 +74,7 @@ class CauseServiceTests {
 
 	@Test
 	@Transactional
-	public void shouldInsertCauseIntoDatabaseAndGenerateId() {
+	void shouldInsertCauseIntoDatabaseAndGenerateId() {
 		
 		final Cause cause = new Cause();
 		cause.setName("prueba");

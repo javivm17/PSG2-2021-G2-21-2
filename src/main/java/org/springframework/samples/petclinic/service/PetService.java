@@ -15,8 +15,6 @@
  */
 package org.springframework.samples.petclinic.service;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import ch.qos.logback.classic.Logger;
-
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
  * for @Transactional and @Cacheable annotations
@@ -50,13 +46,13 @@ public class PetService {
 	
 	private final VisitRepository visitRepository;
 	
-	private AdoptionRequestsRepository adoptionRequestsRepository;
+	private final AdoptionRequestsRepository adoptionRequestsRepository;
 
 	
 
 	@Autowired
 	public PetService(final PetRepository petRepository,
-			final VisitRepository visitRepository, AdoptionRequestsRepository adoptionRequestsRepository) {
+			final VisitRepository visitRepository, final AdoptionRequestsRepository adoptionRequestsRepository) {
 		this.petRepository = petRepository;
 		this.visitRepository = visitRepository;
 		this.adoptionRequestsRepository = adoptionRequestsRepository;
@@ -85,7 +81,7 @@ public class PetService {
 	@Transactional(rollbackFor = DuplicatedPetNameException.class)
 	public void savePet(final Pet pet) throws DataAccessException, DuplicatedPetNameException {
 			final Pet otherPet=pet.getOwner().getPetwithIdDifferent(pet.getName(), pet.getId());
-            if (StringUtils.hasLength(pet.getName()) &&  (otherPet!= null && otherPet.getId()!=pet.getId())) {            	
+            if (StringUtils.hasLength(pet.getName()) &&  (otherPet!= null && !otherPet.getId().equals(pet.getId()))) {            	
             	throw new DuplicatedPetNameException();
             }else
                 this.petRepository.save(pet);                
@@ -99,17 +95,16 @@ public class PetService {
 	@Transactional
 	public void deletePetById(final int id) throws DataAccessException{
 		//Se deben borrar las requests asociadas 
-		List<Adoption>ls =adoptionRequestsRepository.findRequestsByPet(id);
-		for(Adoption a: ls) {
-			adoptionRequestsRepository.deleteById(a.getId());
+		final List<Adoption>ls =this.adoptionRequestsRepository.findRequestsByPet(id);
+		for(final Adoption a: ls) {
+			this.adoptionRequestsRepository.deleteById(a.getId());
 		}
 		this.petRepository.deleteById(id); 
 	}
 	
 	@Transactional(readOnly=true)
-	public List<Pet> findAdoptablePets(Integer id){
-		List<Pet> res = petRepository.findAdoptablePets(id);
-		return res;
+	public List<Pet> findAdoptablePets(final Integer id){
+		return this.petRepository.findAdoptablePets(id);
 	}
 	
 	@Transactional(readOnly=true)

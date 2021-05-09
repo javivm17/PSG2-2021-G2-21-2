@@ -1,30 +1,28 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import org.springframework.samples.petclinic.service.BookingService;
 
 public class BookingValidator implements Validator {
 
+	private final String requerido = "Requerido"; 
+	
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return Booking.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
-	public void validate(Object target, Errors errors) {
-		Booking booking = (Booking) target;
+	public void validate(final Object target, final Errors errors) {
+		final Booking booking = (Booking) target;
 		   		
         if (booking.getInitialDate()==null) {
-        	errors.rejectValue("initialDate", "Requerido", "Requerido");	
+        	errors.rejectValue("initialDate", this.requerido, this.requerido);	
         }
         			
         if (booking.getEndDate()==null) {
-        	errors.rejectValue("endDate", "Requerido", "Requerido");	
+        	errors.rejectValue("endDate", this.requerido, this.requerido);	
         }
         			
         if (booking.getEndDate()!=null && booking.getInitialDate()!=null && booking.getInitialDate().isAfter(booking.getEndDate())) {
