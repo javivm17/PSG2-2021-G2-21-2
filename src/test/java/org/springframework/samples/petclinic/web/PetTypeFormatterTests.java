@@ -1,5 +1,10 @@
 package org.springframework.samples.petclinic.web;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,15 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.samples.petclinic.model.PetType;
-import org.springframework.samples.petclinic.service.VetService;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.samples.petclinic.service.PetService;
 
 /**
@@ -34,29 +30,29 @@ class PetTypeFormatterTests {
 
 	@BeforeEach
 	void setup() {
-		petTypeFormatter = new PetTypeFormatter(clinicService);
+		this.petTypeFormatter = new PetTypeFormatter(this.clinicService);
 	}
 
 	@Test
 	void testPrint() {
-		PetType petType = new PetType();
+		final PetType petType = new PetType();
 		petType.setName("Hamster");
-		String petTypeName = petTypeFormatter.print(petType, Locale.ENGLISH);
-		assertEquals("Hamster", petTypeName);
+		final String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);
+		Assertions.assertEquals("Hamster", petTypeName);
 	}
 
 	@Test
 	void shouldParse() throws ParseException {
-		Mockito.when(clinicService.findPetTypes()).thenReturn(makePetTypes());
-		PetType petType = petTypeFormatter.parse("Bird", Locale.ENGLISH);
-		assertEquals("Bird", petType.getName());
+		Mockito.when(this.clinicService.findPetTypes()).thenReturn(this.makePetTypes());
+		final PetType petType = this.petTypeFormatter.parse("Bird", Locale.ENGLISH);
+		Assertions.assertEquals("Bird", petType.getName());
 	}
 
 	@Test
 	void shouldThrowParseException() throws ParseException {
-		Mockito.when(clinicService.findPetTypes()).thenReturn(makePetTypes());
+		Mockito.when(this.clinicService.findPetTypes()).thenReturn(this.makePetTypes());
 		Assertions.assertThrows(ParseException.class, () -> {
-			petTypeFormatter.parse("Fish", Locale.ENGLISH);
+			this.petTypeFormatter.parse("Fish", Locale.ENGLISH);
 		});
 	}
 
@@ -65,15 +61,15 @@ class PetTypeFormatterTests {
 	 * @return {@link Collection} of {@link PetType}
 	 */
 	private Collection<PetType> makePetTypes() {
-		Collection<PetType> petTypes = new ArrayList<>();
+		final Collection<PetType> petTypes = new ArrayList<>();
 		petTypes.add(new PetType() {
 			{
-				setName("Dog");
+				this.setName("Dog");
 			}
 		});
 		petTypes.add(new PetType() {
 			{
-				setName("Bird");
+				this.setName("Bird");
 			}
 		});
 		return petTypes;

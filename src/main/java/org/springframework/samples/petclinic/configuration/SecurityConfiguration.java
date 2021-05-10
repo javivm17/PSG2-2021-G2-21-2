@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * @author japarejo
  */
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -29,19 +30,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 	
+	private static String admin = "admin";
+	private static String owner = "owner";
+	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/find").hasAnyAuthority("admin")
-				.antMatchers("/owners/my_profile").hasAnyAuthority("owner")				
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")				
-				.antMatchers("/causes/**").hasAnyAuthority("owner","admin")
+				.antMatchers("/admin/**").hasAnyAuthority(SecurityConfiguration.admin)
+				.antMatchers("/owners/find").hasAnyAuthority(SecurityConfiguration.admin)
+				.antMatchers("/owners/my_profile").hasAnyAuthority(SecurityConfiguration.owner)				
+				.antMatchers("/owners/**").hasAnyAuthority(SecurityConfiguration.owner,SecurityConfiguration.admin)				
+				.antMatchers("/causes/**").hasAnyAuthority(SecurityConfiguration.owner,SecurityConfiguration.admin)
 				.antMatchers("/vets/**").authenticated()
-				.antMatchers("/adoption/**").hasAnyAuthority("owner")
+				.antMatchers("/adoption/**").hasAnyAuthority(SecurityConfiguration.owner)
+				.antMatchers("/manage/health/**").permitAll()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
@@ -75,8 +80,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {	    
-		final PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
-	    return encoder;
+	    return NoOpPasswordEncoder.getInstance();
 	}
 	
 }

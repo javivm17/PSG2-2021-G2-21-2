@@ -1,13 +1,8 @@
 package org.springframework.samples.petclinic.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -37,23 +32,23 @@ public class Adoption extends BaseEntity{
      * Setter for property description.
      * @param description New value of property description.
      */
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
 	public Owner getOwner() {
-		return owner;
+		return this.owner;
 	}
 
-	public void setOwner(Owner owner) {
+	public void setOwner(final Owner owner) {
 		this.owner = owner;
 	}
 
 	public Pet getPet() {
-		return pet;
+		return this.pet;
 	}
 
-	public void setPet(Pet pet) {
+	public void setPet(final Pet pet) {
 		this.pet = pet;
 	}
 	

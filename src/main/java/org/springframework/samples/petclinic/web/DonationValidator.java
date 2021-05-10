@@ -9,16 +9,14 @@ import org.springframework.validation.Validator;
 public class DonationValidator implements Validator{
 
 	@Override
-	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
+	public boolean supports(final Class<?> clazz) {
 		return Donation.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
-	public void validate(Object target, Errors errors) {
-		// TODO Auto-generated method stub
-		Donation donation = (Donation) target;
-		Integer amount = donation.getAmount();
+	public void validate(final Object target, final Errors errors) {
+		final Donation donation = (Donation) target;
+		final Integer amount = donation.getAmount();
 		//Amount validation
 		if (amount == null) {
 			errors.rejectValue("amount", "Campo requerido", "Campo requerido");

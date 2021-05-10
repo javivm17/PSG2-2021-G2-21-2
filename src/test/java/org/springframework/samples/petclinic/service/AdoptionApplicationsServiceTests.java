@@ -1,6 +1,6 @@
 package org.springframework.samples.petclinic.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +29,18 @@ class AdoptionApplicationsServiceTests {
 	@Test
 	@Transactional
 	void shouldSaveBooking() {
-		Owner o = ownerService.findOwnerById(2);
-		Pet p = petService.findPetById(2);
-		Adoption request = new Adoption();
+		final Owner o = this.ownerService.findOwnerById(2);
+		final Pet p = this.petService.findPetById(2);
+		final Adoption request = new Adoption();
 		request.setPet(p);
 		request.setDescription("Esto es una prueba");
 		
 			
-		Integer cont1= adoptionRequestService.getRequests(o).size(); 
-		adoptionService.saveRequest(request);
-		Integer cont2= adoptionRequestService.getRequests(o).size(); 
+		final Integer cont1= this.adoptionRequestService.getRequests(o).size(); 
+		this.adoptionService.saveRequest(request);
+		final Integer cont2= this.adoptionRequestService.getRequests(o).size(); 
 			
-		assertThat(cont1<cont2);
+		assertTrue(cont1<cont2);
 		}
 	
 }

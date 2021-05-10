@@ -67,7 +67,7 @@ public class Pet extends NamedEntity {
 	@Column(name = "adoption")
 	private Integer inAdoption;
 
-	public void setBirthDate(LocalDate birthDate) {
+	public void setBirthDate(final LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
@@ -79,7 +79,7 @@ public class Pet extends NamedEntity {
 		return this.type;
 	}
 
-	public void setType(PetType type) {
+	public void setType(final PetType type) {
 		this.type = type;
 	}
 
@@ -87,7 +87,7 @@ public class Pet extends NamedEntity {
 		return this.owner;
 	}
 
-	public void setOwner(Owner owner) {
+	public void setOwner(final Owner owner) {
 		this.owner = owner;
 	}
 
@@ -98,45 +98,49 @@ public class Pet extends NamedEntity {
 		return this.visits;
 	}
 
-	protected void setVisitsInternal(Set<Visit> visits) {
+	protected void setVisitsInternal(final Set<Visit> visits) {
 		this.visits = visits;
 	}
 
 	public List<Visit> getVisits() {
-		List<Visit> sortedVisits = new ArrayList<>(getVisitsInternal());
+		final List<Visit> sortedVisits = new ArrayList<>(this.getVisitsInternal());
 		PropertyComparator.sort(sortedVisits, new MutableSortDefinition("date", false, false));
 		return Collections.unmodifiableList(sortedVisits);
 	}
 
-	public void addVisit(Visit visit) {
-		getVisitsInternal().add(visit);
+	public void addVisit(final Visit visit) {
+		this.getVisitsInternal().add(visit);
 		visit.setPet(this);
 	}
 	
 	
 
-	public void setBookings(Set<Booking> bookings) {
+	public void setBookings(final Set<Booking> bookings) {
 		this.bookings = bookings;
 	}
 	
 	public Set<Booking> getBookings() {
-		return bookings;
+		return this.bookings;
 	}
 
 	public List<Booking> getBookingsList() {
-        List<Booking> sortedBookings = new ArrayList<>(getBookings());
+        final List<Booking> sortedBookings = new ArrayList<>(this.getBookings());
         PropertyComparator.sort(sortedBookings, new MutableSortDefinition("initial_date", false, false));
         return Collections.unmodifiableList(sortedBookings);
 	}
 	
-	public void setInAdoption(Boolean bol) {
-		if(bol == true) this.inAdoption = 1;
+	public void setInAdoption(final boolean bol) {
+		if(bol) this.inAdoption = 1;
 		else this.inAdoption = 0; 
 	}
 
 	public Boolean getInAdoption() {
-		if(this.inAdoption == 1) return true;
-		else return false; 
+		if(this.inAdoption == 1) {
+			return true;
+		}else {
+			return false;	
+		}
+		 
 	}
 	
 }

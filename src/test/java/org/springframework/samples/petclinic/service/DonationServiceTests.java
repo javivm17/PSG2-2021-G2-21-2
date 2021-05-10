@@ -81,7 +81,7 @@ class DonationServiceTests {
 
 	@Test
 	@Transactional
-	public void shouldInsertDonationIntoDatabaseAndGenerateId() {
+	void shouldInsertDonationIntoDatabaseAndGenerateId() {
 		final Owner owner1 = this.ownerService.findOwnerById(1);
 		final Cause c1 = this.causeService.findCauseById(1);
 		
@@ -98,7 +98,7 @@ class DonationServiceTests {
 	@Test
 	void shouldFindDonationsByCauseId() throws Exception {
 		final Collection<Donation> donations = this.donationService.findDonationsByCauseId(3);
-		org.assertj.core.api.Assertions.assertThat(donations.size()).isEqualTo(3);
+		org.assertj.core.api.Assertions.assertThat(donations).hasSize(3);
 		final Donation[] visitArr = donations.toArray(new Donation[donations.size()]);
 		org.assertj.core.api.Assertions.assertThat(visitArr[0].getAmount()).isNotNull();
 		org.assertj.core.api.Assertions.assertThat(visitArr[0].getDate()).isNotNull();
