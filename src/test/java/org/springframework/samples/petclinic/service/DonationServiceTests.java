@@ -74,7 +74,7 @@ class DonationServiceTests {
 	@Test
 	void shouldFindDonationWithCorrectId() {
 		final Donation don1 = this.donationService.findDonationById(1);
-		org.assertj.core.api.Assertions.assertThat(don1.getAmount()).isEqualTo(50);
+		org.assertj.core.api.Assertions.assertThat(don1.getAmount()).isEqualTo("50");
 		org.assertj.core.api.Assertions.assertThat(don1.getCause().getName()).isEqualTo("Limpieza de vertido de petroleo");
 
 	}
@@ -86,7 +86,7 @@ class DonationServiceTests {
 		final Cause c1 = this.causeService.findCauseById(1);
 		
 		final Donation don = new Donation();
-		don.setAmount(11);
+		don.setAmount("11");
 		don.setCause(c1);
 		don.setOwner(owner1);
 		this.donationService.saveDonation(don);
