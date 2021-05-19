@@ -4,7 +4,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-
 <petclinic:layout pageName="donations">
     <jsp:body>
         <h2>Donación para la causa "${cause.name}"</h2>

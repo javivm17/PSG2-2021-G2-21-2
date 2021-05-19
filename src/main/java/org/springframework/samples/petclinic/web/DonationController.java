@@ -30,14 +30,6 @@ public class DonationController {
 	@Autowired
 	private CauseService causeService;
 	
-	@Autowired
-	private DonationValidator validator;
-
-	@InitBinder("donation")
-	public void initDonationBinder(WebDataBinder dataBinder) {
-		dataBinder.setValidator(validator);
-	}
-
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id, cause_id, owner_id");
@@ -67,14 +59,27 @@ public class DonationController {
 			return "causes/createDonationForm";
 		}
 		else {
-			donation.setDate(LocalDate.now());
-			donation.setOwner(this.donationService.getLoggedOwner());
-			this.donationService.saveDonation(donation);
+			try {
+				final Integer amount = Integer.valueOf(donation.getAmount());
+				if(amount<=0) {
+					result.rejectValue("amount", "Debe ser mayor que 0", "Debe ser mayor que 0");
+				}
+				donation.setDate(LocalDate.now());
+				donation.setOwner(this.donationService.getLoggedOwner());
+				this.donationService.saveDonation(donation);
+				
+				final Cause cs = donation.getCause();
+				cs.setDonated(cs.getDonated() + Integer.valueOf(donation.getAmount()));
+				this.causeService.save(cs);
+				return "redirect:/causes/{causeId}";
+				
+			}catch (final NumberFormatException e) {
+				result.rejectValue("amount", "Formato erroneo", "Formato erroneo");
+				return "causes/createDonationForm";
+			}
 			
-			Cause cs = donation.getCause();
-			cs.setDonated(cs.getDonated() + donation.getAmount());
-			this.causeService.save(cs);
-			return "redirect:/causes/{causeId}";
+			
+			
 		}
 	}
 	

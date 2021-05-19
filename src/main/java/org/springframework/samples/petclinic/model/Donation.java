@@ -7,8 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,9 +21,8 @@ public class Donation extends BaseEntity{
 	private LocalDate date;
 	
 	@Column(name = "amount")
-	@NotNull
-	@Min(value=0)
-	private Integer amount;
+	@NotBlank(message = "Campo requerido")
+	private String amount;
 	
 	
 	//relaciones
@@ -47,12 +45,12 @@ public class Donation extends BaseEntity{
 	}
 
 	
-	public Integer getAmount() {
+	public String getAmount() {
 		return this.amount;
 	}
 
 	
-	public void setAmount(final Integer amount) {
+	public void setAmount(final String amount) {
 		this.amount = amount;
 	}
 
