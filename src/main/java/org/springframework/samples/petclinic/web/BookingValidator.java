@@ -29,5 +29,6 @@ public class BookingValidator implements Validator {
         	errors.rejectValue("endDate", "La fecha de fin debe ser posterior a la fecha de fecha de inicio", "La fecha de fin debe ser posterior a la fecha de fecha de inicio");
         }
         
+        
 	}
 }
