@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <petclinic:layout pageName="vets">
     <h2>Veterinarios</h2>
@@ -40,21 +41,24 @@
                 	<spring:url value="vets/{vetId}/edit" var="editUrl">
         				<spring:param name="vetId" value="${vet.id}"/>
     				</spring:url>
+    				<sec:authorize access="hasAuthority('admin')">
     				<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar</a>
     				<!-- Borrar -->
     				<spring:url value="vets/{vetId}/delete" var="deleteUrl">
         				<spring:param name="vetId" value="${vet.id}"/>
     				</spring:url>
     				<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Borrar</a>
+    				</sec:authorize>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
     
+    <sec:authorize access="hasAuthority('admin')">
     <!-- Crear -->
     <a href="vets/new" class="btn btn-default">Añadir un veterinario</a>
-    
+    </sec:authorize>
     <br/>
 	<br/>
     <table class="table-buttons">
