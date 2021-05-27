@@ -30,6 +30,7 @@ public class DonationController {
 	@Autowired
 	private CauseService causeService;
 	
+	
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id, cause_id, owner_id");
@@ -61,8 +62,9 @@ public class DonationController {
 		else {
 			try {
 				final Integer amount = Integer.valueOf(donation.getAmount());
-				if(amount<=0) {
+				if(amount<= 0) {
 					result.rejectValue("amount", "Debe ser mayor que 0", "Debe ser mayor que 0");
+					return "causes/createDonationForm";
 				}
 				donation.setDate(LocalDate.now());
 				donation.setOwner(this.donationService.getLoggedOwner());
