@@ -30,7 +30,9 @@ import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,11 +52,15 @@ public class VetController {
 	private static final String FORM = "vets/createOrUpdateVetForm";
 	private static final String haveNotSpec = "haveNotSpec";
 	
-	private final VetService vetService;
-
 	@Autowired
-	public VetController(final VetService clinicService) {
-		this.vetService = clinicService;
+	private VetService vetService;
+	
+	@Autowired
+	private VetValidator validator;
+	
+	@InitBinder("vet")
+	public void initCauseBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(validator);
 	}
 
 	@GetMapping()
