@@ -21,12 +21,15 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AdoptionRequestService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,13 +55,16 @@ public class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerService ownerService;
+	
+	private final UserService userService;
 		
 	private final AdoptionRequestService adoptionRequestService;
 
 	@Autowired
-	public OwnerController(final OwnerService ownerService, final AuthoritiesService authoritiesService, final AdoptionRequestService adoptionRequestService) {
+	public OwnerController(final OwnerService ownerService,UserService userService, final AuthoritiesService authoritiesService, final AdoptionRequestService adoptionRequestService) {
 		this.ownerService = ownerService;
 		this.adoptionRequestService= adoptionRequestService;
+		this.userService = userService;
 	}
 
 	@InitBinder
@@ -159,10 +165,23 @@ public class OwnerController {
 		try {
 			final Owner owner = this.ownerService.findOwnerById(ownerId);
 			final Owner ownerLogeado = this.ownerService.getOwnerByUserName(principal.getName());
-			this.ownerService.deleteOwner(owner);
-			//If the owner logged is the same than the owner is going to be deleted the session will finish.
-			if(owner.getId().equals(ownerLogeado.getId())) SecurityContextHolder.clearContext();
+			Boolean isAdmin= true;
+			if(ownerLogeado==null) {
+				User user = userService.findUser(principal.getName()).get();
+				isAdmin = user.getAuthorities().stream().anyMatch(x->x.getAuthority().equals("admin"));
+				if(isAdmin) {
+					this.ownerService.deleteOwner(owner);
+					//If the owner logged is the same than the owner is going to be deleted the session will finish.					return "redirect:/";
+				}
+			}else{
+				if(owner.equals(ownerLogeado)||isAdmin) {
+					this.ownerService.deleteOwner(owner);
+					//If the owner logged is the same than the owner is going to be deleted the session will finish.
+					if(owner.getId().equals(ownerLogeado.getId())) SecurityContextHolder.clearContext();
+				}					
+			}
 			return "redirect:/";
+			
 		}
 		catch(final DataAccessException d) {
 			return "redirect:/oups";
